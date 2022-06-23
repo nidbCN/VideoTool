@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import com.jfoenix.controls.JFXListView?>
+
+<StackPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="cn.gaein.java.video.tool.controllers.MainController">
+    <HBox spacing="16">
+        <VBox spacing="16">
+            <JFXListView fx:id="inputFileList">
+            </JFXListView>
+        </VBox>
+        <JFXButton id="testButton" prefWidth="100" prefHeight="40" buttonType="RAISED"
+                   style="-fx-text-fill:WHITE;-fx-background-color:#5264AE;-fx-font-size:14px;" text="BUTTON"
+        onMouseClicked="#onTestButtonClick"/>
+        <JFXButton prefWidth="100" prefHeight="40" buttonType="RAISED" text="COLORED"/>
+        <JFXButton prefWidth="100" prefHeight="40" buttonType="RAISED" text="DISABLED"/>
+
+        <padding>
+            <Insets top="10" left="20"/>
+        </padding>
+    </HBox>
+</StackPane>
