@@ -11,6 +11,7 @@ public class InputVideo {
 
     public InputVideo(String path) {
         file = new File(path);
+        builder.setInput(file.getPath());
     }
 
     public boolean getIsExists() {

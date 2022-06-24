@@ -1,25 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.layout.*?>
 <?import com.jfoenix.controls.JFXButton?>
-<?import javafx.geometry.Insets?>
 <?import com.jfoenix.controls.JFXListView?>
 
+<?import javafx.scene.image.ImageView?>
 <StackPane xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
            fx:controller="cn.gaein.java.video.tool.controllers.MainController">
     <HBox spacing="16">
         <VBox spacing="16">
-            <JFXListView fx:id="inputFileList">
-            </JFXListView>
+            <JFXListView fx:id="inputFileList"/>
+            <JFXButton fx:id="addInputBtn" prefWidth="100" prefHeight="32" buttonType="RAISED"
+                       style="-fx-text-fill:WHITE;-fx-background-color:#5264AE;-fx-font-size:14px;" text="片段开始"
+                       onMouseClicked="#onTestButtonClick"/>
         </VBox>
-        <JFXButton id="testButton" prefWidth="100" prefHeight="40" buttonType="RAISED"
-                   style="-fx-text-fill:WHITE;-fx-background-color:#5264AE;-fx-font-size:14px;" text="BUTTON"
-        onMouseClicked="#onTestButtonClick"/>
-        <JFXButton prefWidth="100" prefHeight="40" buttonType="RAISED" text="COLORED"/>
-        <JFXButton prefWidth="100" prefHeight="40" buttonType="RAISED" text="DISABLED"/>
-
-        <padding>
-            <Insets top="10" left="20"/>
-        </padding>
+        <VBox>
+            <ImageView fx:id="displayView" fitWidth="800" fitHeight="600"/>
+            <HBox spacing="16">
+                <JFXButton fx:id="flagStartBtn" prefWidth="100" prefHeight="32" buttonType="RAISED"
+                           style="-fx-text-fill:WHITE;-fx-background-color:#5264AE;-fx-font-size:14px;" text="片段开始"
+                           onMouseClicked="#onTestButtonClick"/>
+                <JFXButton fx:id="flagEndBtn" prefWidth="100" prefHeight="32" buttonType="RAISED"
+                           style="-fx-text-fill:WHITE;-fx-background-color:#5264AE;-fx-font-size:14px;" text="片段结束"
+                           onMouseClicked="#onTestButtonClick"/>
+                <JFXButton fx:id="flagEditBtn" prefWidth="100" prefHeight="32" buttonType="RAISED"
+                           style="-fx-text-fill:WHITE;-fx-background-color:#5264AE;-fx-font-size:14px;" text="编辑片段"
+                           onMouseClicked="#onTestButtonClick"/>
+                <JFXButton fx:id="flagCancelBtn" prefWidth="100" prefHeight="32" buttonType="RAISED"
+                           style="-fx-text-fill:WHITE;-fx-background-color:#5264AE;-fx-font-size:14px;" text="取消片段"
+                           onMouseClicked="#onTestButtonClick"/>
+            </HBox>
+        </VBox>
+        <VBox spacing="16">
+            <JFXListView fx:id="outputFileList">
+            </JFXListView>
+            <JFXButton fx:id="exportOutputBtn" prefWidth="100" prefHeight="32" buttonType="RAISED"
+                       style="-fx-text-fill:WHITE;-fx-background-color:#5264AE;-fx-font-size:14px;" text="导出序列"
+                       onMouseClicked="#onTestButtonClick"/>
+        </VBox>
     </HBox>
 </StackPane>
