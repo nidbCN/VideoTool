@@ -23,6 +23,8 @@ public class InputVideo {
     }
 
     public String getDisplayName() {
+        var LENGTH = 15;
+
         var fullName = file.getName();
         var extIndex = fullName.lastIndexOf('.');
         var pureName = fullName.substring(0, extIndex);
@@ -30,10 +32,10 @@ public class InputVideo {
 
         var builder = new StringBuilder(fullName.length());
 
-        if (pureName.length() <= 9) {
+        if (pureName.length() <= LENGTH) {
             builder.append(fullName);
         } else {
-            builder.append(pureName, 0, 2);
+            builder.append(pureName, 0, LENGTH - 6);
             builder.append("...");
             builder.append(pureName, pureName.length() - 3, pureName.length() - 1);
             builder.append(extName);

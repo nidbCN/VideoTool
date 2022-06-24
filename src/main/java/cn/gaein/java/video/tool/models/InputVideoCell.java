@@ -13,7 +13,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import org.kordamp.ikonli.javafx.FontIcon;
 
-public class InputVideoCell extends JFXListCell<BorderPane> {
+public class InputVideoCell extends JFXListCell<FlowPane> {
     public InputVideoCell(InputVideo video) {
         setInputVideo(video);
     }
@@ -34,9 +34,9 @@ public class InputVideoCell extends JFXListCell<BorderPane> {
 
         var node = new BorderPane();
 
-        node.setLeft(new Label(inputVideo.getDisplayName()));
-        node.setRight(innerDeleteBtn);
-        node.setMinWidth(136);
+        node.setLeft(innerDeleteBtn);
+        node.setRight(new Label(inputVideo.getDisplayName()));
+        node.setPrefWidth(136);
 
         setStyle("-fx-background-color: rgba(255, 255, 255, 0);");
         setGraphic(node);
