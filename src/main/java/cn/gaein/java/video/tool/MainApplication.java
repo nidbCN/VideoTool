@@ -1,17 +1,26 @@
 package cn.gaein.java.video.tool;
 
+import com.jfoenix.controls.JFXDecorator;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 
 public class MainApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        var loader = new FXMLLoader(MainApplication.class.getResource("main-view.fxml"));
-        var scene = new Scene(loader.load(), 1280, 720);
+        var loader = new FXMLLoader(
+                MainApplication.class.getResource("main-view.fxml"));
+
+        var decorator = new JFXDecorator(stage, loader.load(),
+                false, false, true);
+
+        stage.setResizable(false);
         stage.setTitle("Video Tool!");
+
+        var scene = new Scene(decorator, 1280, 700);
         stage.setScene(scene);
         stage.show();
     }

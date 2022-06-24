@@ -10,5 +10,6 @@ module cn.gaein.video.videotool {
     opens cn.gaein.java.video.tool to javafx.fxml;
     exports cn.gaein.java.video.tool;
     exports cn.gaein.java.video.tool.controllers;
+    exports cn.gaein.java.video.tool.models;
     opens cn.gaein.java.video.tool.controllers to javafx.fxml;
 }
