@@ -2,12 +2,15 @@ package cn.gaein.java.video.tool.controllers;
 
 import cn.gaein.java.video.tool.models.InputVideo;
 import cn.gaein.java.video.tool.models.InputVideoCell;
+import cn.gaein.java.video.tool.utils.FileExtensions;
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXListCell;
 import javafx.fxml.FXML;
 import com.jfoenix.controls.JFXListView;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+
+import java.io.File;
 
 public class MainController {
     @FXML
@@ -38,19 +41,16 @@ public class MainController {
         var chooser = new FileChooser();
 
         chooser.setTitle("导入视频文件");
-        chooser.getExtensionFilters().addAll();
-        chooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files", "*.txt"), new ExtensionFilter("All Files", "*.*"));
+        chooser.getExtensionFilters().addAll(FileExtensions.getVideoExtensions());
+        var fileList = chooser.showOpenMultipleDialog(new Stage());
 
-        var v = new InputVideo("C:\\Users\\Gaein\\Videos\\test.mkv");
-
-        var c = new InputVideoCell(v);
-
-        c.setOnDeleteClicked(e -> {
-            System.out.println("Clicked!!!!");
+        fileList.forEach(file -> {
+            var item = new InputVideoCell(new InputVideo(file));
+            item.setOnDeleteClicked(e -> {
+                System.out.println("Remove");
+                inputFileListArr.remove(item);
+            });
+            inputFileListArr.add(item);
         });
-
-        outputFileList.getItems().add(new JFXListCell<>());
-
-        inputFileListArr.add(c);
     }
 }
