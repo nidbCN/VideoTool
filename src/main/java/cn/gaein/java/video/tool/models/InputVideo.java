@@ -9,6 +9,10 @@ public class InputVideo {
     private final File file;
     private final FFmpegBuilder builder = new FFmpegBuilder();
 
+    public InputVideo(File inputFile) {
+        file = inputFile;
+    }
+
     public InputVideo(String path) {
         file = new File(path);
         builder.setInput(file.getPath());
