@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class MainApplication extends Application {
     @Override
@@ -16,11 +17,11 @@ public class MainApplication extends Application {
 
         var decorator = new JFXDecorator(stage, loader.load(),
                 false, false, true);
-
-        stage.setResizable(false);
-        stage.setTitle("Video Tool!");
+        decorator.setTitle("Video Tool!");
 
         var scene = new Scene(decorator, 1280, 700);
+
+        stage.setResizable(false);
         stage.setScene(scene);
         stage.show();
     }
