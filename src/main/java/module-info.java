@@ -1,15 +1,18 @@
 module cn.gaein.video.videotool {
+    requires javafx.base;
     requires javafx.controls;
     requires javafx.fxml;
+    requires javafx.graphics;
     requires org.kordamp.ikonli.javafx;
     requires com.jfoenix;
     requires ffmpeg;
     requires uk.co.caprica.vlcj;
     requires uk.co.caprica.vlcj.javafx;
 
-    opens cn.gaein.java.video.tool to javafx.fxml;
     exports cn.gaein.java.video.tool;
     exports cn.gaein.java.video.tool.controllers;
     exports cn.gaein.java.video.tool.models;
+
+    opens cn.gaein.java.video.tool to javafx.fxml;
     opens cn.gaein.java.video.tool.controllers to javafx.fxml;
 }
