@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.layout.*?>
-<?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXListView?>
 <?import javafx.geometry.Insets?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
-<?import com.jfoenix.controls.JFXProgressBar?>
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXListView?>
+<?import io.github.palexdev.materialfx.controls.MFXProgressBar?>
 <StackPane xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
            fx:controller="cn.gaein.java.video.tool.controllers.MainController">
@@ -14,11 +14,11 @@
         </padding>
 
         <VBox spacing="16">
-            <JFXListView fx:id="inputFileList" prefHeight="486"/>
-            <JFXButton fx:id="addInputBtn" buttonType="RAISED"
+            <MFXListView fx:id="inputFileList" prefHeight="486"/>
+            <MFXButton fx:id="addInputBtn" buttonType="RAISED"
                        prefWidth="120" prefHeight="32" text="添加视频"
                        onMouseClicked="#onAddInputClick">
-            </JFXButton>
+            </MFXButton>
         </VBox>
         <VBox spacing="16">
             <VBox spacing="2">
@@ -29,35 +29,35 @@
                     </BorderPane>
                 </Pane>
                 <HBox>
-                    <JFXButton fx:id="displayPlayCtrlBtn" buttonType="RAISED"
+                    <MFXButton fx:id="displayPlayCtrlBtn" buttonType="RAISED"
                                prefWidth="32" prefHeight="32">
                         <graphic>
                             <FontIcon iconLiteral="mdi2p-play" iconColor="white" iconSize="24"/>
                         </graphic>
-                    </JFXButton>
-                    <JFXButton fx:id="displayStopBtn" buttonType="RAISED"
+                    </MFXButton>
+                    <MFXButton fx:id="displayStopBtn" buttonType="RAISED"
                                prefWidth="32" prefHeight="32">
                         <graphic>
                             <FontIcon iconLiteral="mdi2p-play" iconColor="white" iconSize="24"/>
                         </graphic>
-                    </JFXButton>
-                    <JFXProgressBar progress="0.5"/>
+                    </MFXButton>
+                    <MFXProgressBar progress="0.5"/>
                 </HBox>
             </VBox>
             <HBox spacing="16">
-                <JFXButton fx:id="flagStartBtn" buttonType="RAISED"
+                <MFXButton fx:id="flagStartBtn" buttonType="RAISED"
                            prefWidth="120" prefHeight="32" text="片段开始"/>
-                <JFXButton fx:id="flagEndBtn" buttonType="RAISED"
+                <MFXButton fx:id="flagEndBtn" buttonType="RAISED"
                            prefWidth="120" prefHeight="32" text="片段结束"/>
-                <JFXButton fx:id="flagEditBtn" buttonType="RAISED"
+                <MFXButton fx:id="flagEditBtn" buttonType="RAISED"
                            prefWidth="120" prefHeight="32" text="编辑片段"/>
-                <JFXButton fx:id="flagCancelBtn" buttonType="RAISED"
+                <MFXButton fx:id="flagCancelBtn" buttonType="RAISED"
                            prefWidth="120" prefHeight="32" text="取消片段"/>
             </HBox>
         </VBox>
         <VBox spacing="16">
-            <JFXListView fx:id="outputFileList" prefHeight="486"/>
-            <JFXButton fx:id="exportOutputBtn" buttonType="RAISED"
+            <MFXListView fx:id="outputFileList" prefHeight="486"/>
+            <MFXButton fx:id="exportOutputBtn" buttonType="RAISED"
                        prefWidth="120" prefHeight="32" text="导出序列"/>
         </VBox>
     </HBox>

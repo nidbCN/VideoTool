@@ -3,9 +3,9 @@ package cn.gaein.java.video.tool.controllers;
 import cn.gaein.java.video.tool.models.InputVideo;
 import cn.gaein.java.video.tool.models.InputVideoCell;
 import cn.gaein.java.video.tool.utils.FileExtensions;
-import com.jfoenix.controls.JFXButton;
+import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXListView;
 import javafx.fxml.FXML;
-import com.jfoenix.controls.JFXListView;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
@@ -23,25 +23,25 @@ public class MainController {
     private final EmbeddedMediaPlayer mediaPlayer;
 
     @FXML
-    public JFXListView<InputVideoCell> inputFileList;
+    public MFXListView<InputVideoCell> inputFileList;
     @FXML
     public BorderPane displayViewPane;
     @FXML
     public ImageView displayView = new ImageView();
     @FXML
-    public JFXButton flagStartBtn;
+    public MFXButton flagStartBtn;
     @FXML
-    public JFXButton flagEndBtn;
+    public MFXButton flagEndBtn;
     @FXML
-    public JFXButton flagEditBtn;
+    public MFXButton flagEditBtn;
     @FXML
-    public JFXButton flagCancelBtn;
+    public MFXButton flagCancelBtn;
     @FXML
-    public JFXListView outputFileList;
+    public MFXListView outputFileList;
     @FXML
-    public JFXButton exportOutputBtn;
+    public MFXButton exportOutputBtn;
     @FXML
-    public JFXButton addInputBtn;
+    public MFXButton addInputBtn;
 
     public MainController() {
         mediaPlayer = mediaPlayerFactory.mediaPlayers().newEmbeddedMediaPlayer();

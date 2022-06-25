@@ -26,7 +26,6 @@ repositories {
 
 dependencies {
     implementation 'io.github.palexdev:materialfx:11.13.5'
-    implementation 'com.jfoenix:jfoenix:9.0.10'
     implementation 'org.openjfx:javafx-controls:18.0.1'
     implementation 'org.openjfx:javafx-fxml:18.0.1'
     implementation 'org.kordamp.ikonli:ikonli-javafx:12.3.1'

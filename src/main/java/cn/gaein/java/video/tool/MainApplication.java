@@ -1,6 +1,5 @@
 package cn.gaein.java.video.tool;
 
-import com.jfoenix.controls.JFXDecorator;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -15,16 +14,13 @@ public class MainApplication extends Application {
         var loader = new FXMLLoader(
                 MainApplication.class.getResource("main-view.fxml"));
 
-        var decorator = new JFXDecorator(stage, loader.load(),
-                false, false, true);
-        decorator.setTitle("Video Tool!");
-
-        var scene = new Scene(decorator, 1280, 600);
+        var scene = new Scene(loader.load(), 1280, 600);
         scene.getStylesheets().addAll(
                 Objects.requireNonNull(getClass().getResource("styles/Button.css")).toExternalForm(),
                 Objects.requireNonNull(getClass().getResource("styles/GlowSansSC.css")).toExternalForm()
         );
 
+        stage.setTitle("Video Tool!");
         stage.setResizable(false);
         stage.setScene(scene);
         stage.show();

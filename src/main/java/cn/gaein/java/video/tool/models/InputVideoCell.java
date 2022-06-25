@@ -1,13 +1,13 @@
 package cn.gaein.java.video.tool.models;
 
-import com.jfoenix.controls.JFXListCell;
 import javafx.event.EventHandler;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import org.kordamp.ikonli.javafx.FontIcon;
 
-public class InputVideoCell extends JFXListCell<FlowPane> {
+public class InputVideoCell extends ListCell<FlowPane> {
     public InputVideoCell(InputVideo video) {
         setInputVideo(video);
     }
