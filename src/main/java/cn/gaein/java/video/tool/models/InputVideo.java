@@ -18,6 +18,10 @@ public class InputVideo {
         builder.setInput(file.getPath());
     }
 
+    public File getFile() {
+        return file;
+    }
+
     public boolean getIsExists() {
         return file.exists();
     }
@@ -42,6 +46,11 @@ public class InputVideo {
         }
 
         return builder.toString();
+    }
+
+    @Override
+    public String toString() {
+        return getDisplayName();
     }
 
     public FFmpegBuilder getBuilder() {

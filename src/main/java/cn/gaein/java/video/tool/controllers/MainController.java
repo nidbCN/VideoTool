@@ -5,11 +5,14 @@ import cn.gaein.java.video.tool.models.InputVideoCell;
 import cn.gaein.java.video.tool.utils.FileExtensions;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXListView;
+import io.github.palexdev.materialfx.controls.cell.MFXListCell;
+import io.github.palexdev.materialfx.utils.others.FunctionalStringConverter;
 import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
 import uk.co.caprica.vlcj.player.base.MediaPlayer;
 import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter;
@@ -23,7 +26,7 @@ public class MainController {
     private final EmbeddedMediaPlayer mediaPlayer;
 
     @FXML
-    public MFXListView<InputVideoCell> inputFileList;
+    public MFXListView<InputVideo> inputFileList;
     @FXML
     public BorderPane displayViewPane;
     @FXML
@@ -73,6 +76,10 @@ public class MainController {
         displayViewPane.setCenter(displayView);
 
         mediaPlayer.videoSurface().set(videoSurfaceForImageView(displayView));
+
+        var converter = FunctionalStringConverter.to(InputVideo::getDisplayName);
+        inputFileList.setConverter(converter);
+        inputFileList.setCellFactory(v -> new InputVideoCell(inputFileList, v));
     }
 
     @FXML
@@ -88,19 +95,17 @@ public class MainController {
         if (fileList == null)
             return;
 
-        fileList.forEach(file -> {
-            var item = new InputVideoCell(new InputVideo(file));
+        fileList.forEach(f -> {
+            var video = new InputVideo(f);
+            var index = inputFileListArr.size();
 
-            item.setOnDeleteClicked(e -> {
-                // remove button clicked
-                inputFileListArr.remove(item);
-            });
+            inputFileListArr.add(index, video);
+
+            var item = inputFileList.getCell(index);
             item.setOnMouseClicked(e -> {
                 // video item clicked
-                mediaPlayer.media().play(file.getPath());
+                mediaPlayer.media().play(video.getFile().getPath());
             });
-
-            inputFileListArr.add(item);
         });
     }
 }

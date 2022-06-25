@@ -1,47 +1,26 @@
 package cn.gaein.java.video.tool.models;
 
-import javafx.event.EventHandler;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
-import org.kordamp.ikonli.javafx.FontIcon;
+import io.github.palexdev.materialfx.controls.MFXListView;
+import io.github.palexdev.materialfx.controls.cell.MFXListCell;
+import io.github.palexdev.materialfx.font.MFXFontIcon;
 
-public class InputVideoCell extends ListCell<FlowPane> {
-    public InputVideoCell(InputVideo video) {
-        setInputVideo(video);
+public class InputVideoCell extends MFXListCell<InputVideo> {
+    private final MFXFontIcon videoIcon;
+
+    public InputVideoCell(MFXListView<InputVideo> listView, InputVideo video) {
+        super(listView, video);
+
+        videoIcon = new MFXFontIcon("mfx-video", 18);
+
+        render(video);
     }
 
-    private InputVideo inputVideo;
+    @Override
+    protected void render(InputVideo data) {
+        super.render(data);
 
-    private EventHandler<? super MouseEvent> onDeleteClicked;
-
-    public final InputVideo getInputVideo() {
-        return inputVideo;
-    }
-
-    public final void setInputVideo(InputVideo video) {
-        inputVideo = video;
-
-        var innerDeleteBtn = new FontIcon("mdi2d-delete");
-        innerDeleteBtn.setOnMouseClicked(e -> onDeleteClicked.handle(e));
-
-        var node = new BorderPane();
-
-        node.setLeft(innerDeleteBtn);
-        node.setRight(new Label(inputVideo.getDisplayName()));
-        node.setPrefWidth(136);
-
-        setStyle("-fx-background-color: rgba(255, 255, 255, 0);");
-        setGraphic(node);
-    }
-
-    public final void setOnDeleteClicked(
-            EventHandler<? super MouseEvent> value) {
-        onDeleteClicked = value;
-    }
-
-    public final EventHandler<? super MouseEvent> getOnDeleteClicked() {
-        return onDeleteClicked;
+        if (videoIcon != null) {
+            getChildren().add(0, videoIcon);
+        }
     }
 }
