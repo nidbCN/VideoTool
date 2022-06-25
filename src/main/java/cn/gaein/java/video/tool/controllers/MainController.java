@@ -8,6 +8,7 @@ import io.github.palexdev.materialfx.controls.MFXListView;
 import io.github.palexdev.materialfx.controls.cell.MFXListCell;
 import io.github.palexdev.materialfx.utils.others.FunctionalStringConverter;
 import javafx.fxml.FXML;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
@@ -18,6 +19,8 @@ import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
 import uk.co.caprica.vlcj.player.base.MediaPlayer;
 import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter;
 import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
+
+import java.util.Objects;
 
 import static uk.co.caprica.vlcj.javafx.videosurface.ImageViewVideoSurfaceFactory.videoSurfaceForImageView;
 
@@ -82,6 +85,9 @@ public class MainController {
         displayView.fitWidthProperty().bind(displayViewPane.widthProperty());
         displayView.fitHeightProperty().bind(displayViewPane.heightProperty());
         displayView.setPreserveRatio(true);
+
+        displayView.setImage(new Image(Objects.requireNonNull(
+                getClass().getResource("images/player_background.png")).toExternalForm()));
         displayViewPane.setCenter(displayView);
 
         mediaPlayer.videoSurface().set(videoSurfaceForImageView(displayView));
