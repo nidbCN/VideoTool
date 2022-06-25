@@ -19,7 +19,11 @@ public class MainApplication extends Application {
                 false, false, true);
         decorator.setTitle("Video Tool!");
 
-        var scene = new Scene(decorator, 1280, 700);
+        var scene = new Scene(decorator, 1280, 600);
+        scene.getStylesheets().addAll(
+                Objects.requireNonNull(getClass().getResource("styles/Button.css")).toExternalForm(),
+                Objects.requireNonNull(getClass().getResource("styles/GlowSansSC.css")).toExternalForm()
+        );
 
         stage.setResizable(false);
         stage.setScene(scene);
