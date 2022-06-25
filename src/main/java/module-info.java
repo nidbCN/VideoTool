@@ -5,6 +5,7 @@ module cn.gaein.video.videotool {
     requires javafx.graphics;
     requires org.kordamp.ikonli.javafx;
     requires com.jfoenix;
+    requires MaterialFX;
     requires ffmpeg;
     requires uk.co.caprica.vlcj;
     requires uk.co.caprica.vlcj.javafx;
