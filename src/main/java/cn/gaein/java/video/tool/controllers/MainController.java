@@ -13,6 +13,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
+import org.kordamp.ikonli.javafx.FontIcon;
 import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
 import uk.co.caprica.vlcj.player.base.MediaPlayer;
 import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter;
@@ -44,7 +45,15 @@ public class MainController {
     @FXML
     public MFXButton exportOutputBtn;
     @FXML
-    public MFXButton addInputBtn;
+    public MFXButton inputAddBtn;
+    @FXML
+    public MFXButton inputRemoveBtn;
+    @FXML
+    public FontIcon displayCtrlIcon;
+    @FXML
+    public MFXButton displayCtrlBtn;
+    @FXML
+    public MFXButton displayStopBtn;
 
     public MainController() {
         mediaPlayer = mediaPlayerFactory.mediaPlayers().newEmbeddedMediaPlayer();
@@ -105,7 +114,43 @@ public class MainController {
             item.setOnMouseClicked(e -> {
                 // video item clicked
                 mediaPlayer.media().play(video.getFile().getPath());
+                displayCtrlIcon.setIconLiteral("mdi2p-pause");
             });
         });
+    }
+
+    @FXML
+    protected void onRemoveInputClick() {
+        var inputFileListArr = inputFileList.getItems();
+        var selectFileListArr = inputFileList.getSelectionModel().getSelectedValues();
+
+        inputFileListArr.removeAll(selectFileListArr);
+
+        // Only select one, must be the video witch are playing
+        onStopDisplayClick();
+    }
+
+    @FXML
+    protected void onCtrlDisplayClick() {
+        if (mediaPlayer.status().isPlaying()) {
+            if (mediaPlayer.status().canPause()) {
+                // pause
+                mediaPlayer.controls().pause();
+
+                displayCtrlIcon.setIconLiteral("mdi2p-play");
+            }
+        } else {
+            // play
+            mediaPlayer.controls().play();
+
+            displayCtrlIcon.setIconLiteral("mdi2p-pause");
+        }
+    }
+
+    @FXML
+    protected void onStopDisplayClick() {
+        mediaPlayer.controls().stop();
+        displayCtrlIcon.setIconLiteral("mdi2p-play");
+        displayView.setImage(null);
     }
 }

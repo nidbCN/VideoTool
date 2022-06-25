@@ -4,7 +4,7 @@
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
 <?import io.github.palexdev.materialfx.controls.MFXListView?>
-<?import io.github.palexdev.materialfx.controls.MFXProgressBar?>
+<?import io.github.palexdev.materialfx.controls.MFXSlider?>
 <StackPane xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
            fx:controller="cn.gaein.java.video.tool.controllers.MainController">
@@ -15,10 +15,16 @@
 
         <VBox spacing="16">
             <MFXListView fx:id="inputFileList" prefHeight="486"/>
-            <MFXButton fx:id="addInputBtn" buttonType="RAISED"
-                       prefWidth="120" prefHeight="32" text="添加视频"
-                       onMouseClicked="#onAddInputClick">
-            </MFXButton>
+            <HBox spacing="8">
+                <MFXButton fx:id="inputAddBtn" buttonType="RAISED" styleClass="primary"
+                           prefWidth="96" prefHeight="32" text="添加视频"
+                           onMouseClicked="#onAddInputClick">
+                </MFXButton>
+                <MFXButton fx:id="inputRemoveBtn" buttonType="RAISED" styleClass="primary"
+                           prefWidth="96" prefHeight="32" text="移除视频"
+                           onMouseClicked="#onRemoveInputClick">
+                </MFXButton>
+            </HBox>
         </VBox>
         <VBox spacing="16">
             <VBox spacing="2">
@@ -28,36 +34,44 @@
                                 style="-fx-background-color: black">
                     </BorderPane>
                 </Pane>
-                <HBox>
-                    <MFXButton fx:id="displayPlayCtrlBtn" buttonType="RAISED"
-                               prefWidth="32" prefHeight="32">
+                <HBox spacing="4">
+                    <MFXButton fx:id="displayCtrlBtn" buttonType="RAISED" styleClass="primary"
+                               prefWidth="32" prefHeight="32" text=""
+                               onMouseClicked="#onCtrlDisplayClick">
                         <graphic>
-                            <FontIcon iconLiteral="mdi2p-play" iconColor="white" iconSize="24"/>
+                            <FontIcon fx:id="displayCtrlIcon" iconColor="white" iconSize="24"
+                                      iconLiteral="mdi2p-play"/>
                         </graphic>
                     </MFXButton>
-                    <MFXButton fx:id="displayStopBtn" buttonType="RAISED"
-                               prefWidth="32" prefHeight="32">
+                    <MFXButton fx:id="displayStopBtn" buttonType="RAISED" styleClass="primary"
+                               prefWidth="32" prefHeight="32" text=""
+                               onMouseClicked="#onStopDisplayClick">
                         <graphic>
-                            <FontIcon iconLiteral="mdi2p-play" iconColor="white" iconSize="24"/>
+                            <FontIcon iconLiteral="mdi2s-stop" iconColor="white" iconSize="24"/>
                         </graphic>
                     </MFXButton>
-                    <MFXProgressBar progress="0.5"/>
+                    <StackPane>
+                        <padding>
+                            <Insets top="4" bottom="4" left="4" right="4"/>
+                        </padding>
+                        <MFXSlider BorderPane.alignment="CENTER" prefWidth="640"/>
+                    </StackPane>
                 </HBox>
             </VBox>
             <HBox spacing="16">
-                <MFXButton fx:id="flagStartBtn" buttonType="RAISED"
+                <MFXButton fx:id="flagStartBtn" buttonType="RAISED" styleClass="primary"
                            prefWidth="120" prefHeight="32" text="片段开始"/>
-                <MFXButton fx:id="flagEndBtn" buttonType="RAISED"
+                <MFXButton fx:id="flagEndBtn" buttonType="RAISED" styleClass="primary"
                            prefWidth="120" prefHeight="32" text="片段结束"/>
-                <MFXButton fx:id="flagEditBtn" buttonType="RAISED"
+                <MFXButton fx:id="flagEditBtn" buttonType="RAISED" styleClass="primary"
                            prefWidth="120" prefHeight="32" text="编辑片段"/>
-                <MFXButton fx:id="flagCancelBtn" buttonType="RAISED"
+                <MFXButton fx:id="flagCancelBtn" buttonType="RAISED" styleClass="primary"
                            prefWidth="120" prefHeight="32" text="取消片段"/>
             </HBox>
         </VBox>
         <VBox spacing="16">
             <MFXListView fx:id="outputFileList" prefHeight="486"/>
-            <MFXButton fx:id="exportOutputBtn" buttonType="RAISED"
+            <MFXButton fx:id="exportOutputBtn" buttonType="RAISED" styleClass="primary"
                        prefWidth="120" prefHeight="32" text="导出序列"/>
         </VBox>
     </HBox>
