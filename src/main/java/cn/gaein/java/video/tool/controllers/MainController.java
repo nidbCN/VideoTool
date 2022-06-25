@@ -7,6 +7,7 @@ import com.jfoenix.controls.JFXButton;
 import javafx.fxml.FXML;
 import com.jfoenix.controls.JFXListView;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
@@ -14,19 +15,19 @@ import uk.co.caprica.vlcj.player.base.MediaPlayer;
 import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter;
 import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
 
-import java.io.File;
-
 import static uk.co.caprica.vlcj.javafx.videosurface.ImageViewVideoSurfaceFactory.videoSurfaceForImageView;
 
 public class MainController {
     private final MediaPlayerFactory mediaPlayerFactory = new MediaPlayerFactory();
 
-    private final EmbeddedMediaPlayer embeddedMediaPlayer;
+    private final EmbeddedMediaPlayer mediaPlayer;
 
     @FXML
     public JFXListView<InputVideoCell> inputFileList;
     @FXML
-    public ImageView displayView;
+    public BorderPane displayViewPane;
+    @FXML
+    public ImageView displayView = new ImageView();
     @FXML
     public JFXButton flagStartBtn;
     @FXML
@@ -43,31 +44,39 @@ public class MainController {
     public JFXButton addInputBtn;
 
     public MainController() {
-        embeddedMediaPlayer = mediaPlayerFactory.mediaPlayers().newEmbeddedMediaPlayer();
-        embeddedMediaPlayer.events().addMediaPlayerEventListener(new MediaPlayerEventAdapter() {
-            @Override
-            public void playing(MediaPlayer mediaPlayer) {
-            }
+        mediaPlayer = mediaPlayerFactory.mediaPlayers().newEmbeddedMediaPlayer();
+        mediaPlayer.events().addMediaPlayerEventListener(
+                new MediaPlayerEventAdapter() {
+                    @Override
+                    public void playing(MediaPlayer mediaPlayer) {
+                    }
 
-            @Override
-            public void paused(MediaPlayer mediaPlayer) {
-            }
+                    @Override
+                    public void paused(MediaPlayer mediaPlayer) {
+                    }
 
-            @Override
-            public void stopped(MediaPlayer mediaPlayer) {
-            }
+                    @Override
+                    public void stopped(MediaPlayer mediaPlayer) {
+                    }
 
-            @Override
-            public void timeChanged(MediaPlayer mediaPlayer, long newTime) {
-            }
-        });
+                    @Override
+                    public void timeChanged(MediaPlayer mediaPlayer, long newTime) {
+                    }
+                });
+    }
+
+    @FXML
+    private void initialize() {
+        displayView.fitWidthProperty().bind(displayViewPane.widthProperty());
+        displayView.fitHeightProperty().bind(displayViewPane.heightProperty());
+        displayView.setPreserveRatio(true);
+        displayViewPane.setCenter(displayView);
+
+        mediaPlayer.videoSurface().set(videoSurfaceForImageView(displayView));
     }
 
     @FXML
     protected void onAddInputClick() {
-        // TODO: move set video surface to init method
-        embeddedMediaPlayer.videoSurface().set(videoSurfaceForImageView(displayView));
-
         var inputFileListArr = inputFileList.getItems();
 
         var chooser = new FileChooser();
@@ -88,7 +97,7 @@ public class MainController {
             });
             item.setOnMouseClicked(e -> {
                 // video item clicked
-                embeddedMediaPlayer.media().play(file.getPath());
+                mediaPlayer.media().play(file.getPath());
             });
 
             inputFileListArr.add(item);

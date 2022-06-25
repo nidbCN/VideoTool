@@ -2,9 +2,9 @@
 <?import javafx.scene.layout.*?>
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXListView?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.geometry.Insets?>
-
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<?import com.jfoenix.controls.JFXProgressBar?>
 <StackPane xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
            fx:controller="cn.gaein.java.video.tool.controllers.MainController">
@@ -14,31 +14,51 @@
         </padding>
 
         <VBox spacing="16">
-            <JFXListView fx:id="inputFileList" minHeight="580">
-            </JFXListView>
-            <JFXButton fx:id="addInputBtn" prefWidth="120" prefHeight="32" buttonType="RAISED"
-                       style="-fx-text-fill:WHITE;-fx-background-color:#5264AE;-fx-font-size:14px;"
-                       text="添加视频"
+            <JFXListView fx:id="inputFileList" prefHeight="486"/>
+            <JFXButton fx:id="addInputBtn" buttonType="RAISED"
+                       prefWidth="120" prefHeight="32" text="添加视频"
                        onMouseClicked="#onAddInputClick">
             </JFXButton>
         </VBox>
-        <VBox>
-            <ImageView fx:id="displayView" fitWidth="800" fitHeight="600" preserveRatio="true"/>
+        <VBox spacing="16">
+            <VBox spacing="2">
+                <Pane>
+                    <BorderPane fx:id="displayViewPane"
+                                prefWidth="800" prefHeight="450"
+                                style="-fx-background-color: black">
+                    </BorderPane>
+                </Pane>
+                <HBox>
+                    <JFXButton fx:id="displayPlayCtrlBtn" buttonType="RAISED"
+                               prefWidth="32" prefHeight="32">
+                        <graphic>
+                            <FontIcon iconLiteral="mdi2p-play" iconColor="white" iconSize="24"/>
+                        </graphic>
+                    </JFXButton>
+                    <JFXButton fx:id="displayStopBtn" buttonType="RAISED"
+                               prefWidth="32" prefHeight="32">
+                        <graphic>
+                            <FontIcon iconLiteral="mdi2p-play" iconColor="white" iconSize="24"/>
+                        </graphic>
+                    </JFXButton>
+                    <JFXProgressBar progress="0.5"/>
+                </HBox>
+            </VBox>
             <HBox spacing="16">
-                <JFXButton fx:id="flagStartBtn" prefWidth="120" prefHeight="32" buttonType="RAISED"
-                           style="-fx-text-fill:WHITE;-fx-background-color:#5264AE;-fx-font-size:14px;" text="片段开始"/>
-                <JFXButton fx:id="flagEndBtn" prefWidth="120" prefHeight="32" buttonType="RAISED"
-                           style="-fx-text-fill:WHITE;-fx-background-color:#5264AE;-fx-font-size:14px;" text="片段结束"/>
-                <JFXButton fx:id="flagEditBtn" prefWidth="120" prefHeight="32" buttonType="RAISED"
-                           style="-fx-text-fill:WHITE;-fx-background-color:#5264AE;-fx-font-size:14px;" text="编辑片段"/>
-                <JFXButton fx:id="flagCancelBtn" prefWidth="120" prefHeight="32" buttonType="RAISED"
-                           style="-fx-text-fill:WHITE;-fx-background-color:#5264AE;-fx-font-size:14px;" text="取消片段"/>
+                <JFXButton fx:id="flagStartBtn" buttonType="RAISED"
+                           prefWidth="120" prefHeight="32" text="片段开始"/>
+                <JFXButton fx:id="flagEndBtn" buttonType="RAISED"
+                           prefWidth="120" prefHeight="32" text="片段结束"/>
+                <JFXButton fx:id="flagEditBtn" buttonType="RAISED"
+                           prefWidth="120" prefHeight="32" text="编辑片段"/>
+                <JFXButton fx:id="flagCancelBtn" buttonType="RAISED"
+                           prefWidth="120" prefHeight="32" text="取消片段"/>
             </HBox>
         </VBox>
         <VBox spacing="16">
-            <JFXListView fx:id="outputFileList"/>
-            <JFXButton fx:id="exportOutputBtn" prefWidth="120" prefHeight="32" buttonType="RAISED"
-                       style="-fx-text-fill:WHITE;-fx-background-color:#5264AE;-fx-font-size:14px;" text="导出序列"/>
+            <JFXListView fx:id="outputFileList" prefHeight="486"/>
+            <JFXButton fx:id="exportOutputBtn" buttonType="RAISED"
+                       prefWidth="120" prefHeight="32" text="导出序列"/>
         </VBox>
     </HBox>
 </StackPane>
