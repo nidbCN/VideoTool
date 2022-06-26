@@ -6,6 +6,8 @@ import cn.gaein.java.video.tool.models.InputVideoCell;
 import cn.gaein.java.video.tool.utils.FileExtensions;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXListView;
+import io.github.palexdev.materialfx.effects.DepthLevel;
+import io.github.palexdev.materialfx.effects.MFXDepthManager;
 import io.github.palexdev.materialfx.utils.others.FunctionalStringConverter;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -99,6 +101,7 @@ public class MainController {
         displayView.fitHeightProperty().bind(displayViewPane.heightProperty());
         displayView.setPreserveRatio(true);
         displayViewPane.setCenter(displayView);
+        displayViewPane.setEffect(MFXDepthManager.shadowOf(DepthLevel.LEVEL2));
         mediaPlayer.videoSurface().set(videoSurfaceForImageView(displayView));
         displayPositionBar = new VFXPositionBar(mediaPlayer);
         displayCtrlPane.getChildren().add(displayPositionBar);

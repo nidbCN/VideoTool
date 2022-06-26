@@ -2,11 +2,12 @@ package cn.gaein.java.video.tool.compontents;
 
 import cn.gaein.java.video.tool.compontents.beans.PositionProperty;
 import io.github.palexdev.materialfx.controls.MFXSlider;
+import io.github.palexdev.materialfx.effects.DepthLevel;
+import io.github.palexdev.materialfx.effects.MFXDepthManager;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
-import javafx.scene.text.Font;
 import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
 
 import java.text.SimpleDateFormat;
@@ -24,14 +25,16 @@ public class VFXPositionBar extends HBox {
             = new SimpleDateFormat("HH:mm:ss:SSS", Locale.UK);
 
     public VFXPositionBar(EmbeddedMediaPlayer player) {
-        setPadding(new Insets(8, 2, 8, 4));
+        setPadding(new Insets(8, 8, 0, 16));
         setSpacing(8);
+        setStyle("-fx-background-color: white;");
+        setEffect(MFXDepthManager.shadowOf(DepthLevel.LEVEL2));
 
         positionProperty = new PositionProperty(player);
 
         timeBar.setDisable(true);
         timeBar.setPopupSupplier(Region::new);
-        timeBar.setPrefWidth(600);
+        timeBar.setPrefWidth(584);
         timeBar.valueProperty().bindBidirectional(positionProperty);
 
         formatter.setTimeZone(TimeZone.getTimeZone("UTC"));

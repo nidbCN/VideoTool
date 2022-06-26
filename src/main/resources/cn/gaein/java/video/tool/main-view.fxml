@@ -12,7 +12,6 @@
         <padding>
             <Insets top="16" right="16" bottom="16" left="16"/>
         </padding>
-
         <VBox spacing="16">
             <MFXListView fx:id="inputFileList" prefHeight="486"/>
             <HBox spacing="8">
@@ -27,13 +26,11 @@
             </HBox>
         </VBox>
         <VBox spacing="16">
-            <VBox spacing="2">
-                <Pane>
-                    <BorderPane fx:id="displayViewPane"
-                                prefWidth="800" prefHeight="450"
-                                style="-fx-background-color: black">
-                    </BorderPane>
-                </Pane>
+            <VBox spacing="4">
+                <BorderPane fx:id="displayViewPane"
+                            prefWidth="800" prefHeight="450"
+                            style="-fx-background-color: black">
+                </BorderPane>
                 <HBox spacing="4">
                     <MFXButton fx:id="displayCtrlBtn" buttonType="RAISED" styleClass="normal, source-font"
                                prefWidth="32" prefHeight="32" text=""
@@ -50,11 +47,7 @@
                             <FontIcon iconLiteral="mdi2s-stop" iconColor="#7a0ed9" iconSize="24"/>
                         </graphic>
                     </MFXButton>
-                    <StackPane fx:id="displayCtrlPane">
-                        <padding>
-                            <Insets top="4" bottom="4" left="4" right="4"/>
-                        </padding>
-                    </StackPane>
+                    <StackPane fx:id="displayCtrlPane"/>
                 </HBox>
             </VBox>
             <HBox spacing="16">
