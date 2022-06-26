@@ -10,6 +10,7 @@ module cn.gaein.video.videotool {
     requires uk.co.caprica.vlcj.javafx;
 
     exports cn.gaein.java.video.tool;
+    exports cn.gaein.java.video.tool.compontents;
     exports cn.gaein.java.video.tool.controllers;
     exports cn.gaein.java.video.tool.models;
 
