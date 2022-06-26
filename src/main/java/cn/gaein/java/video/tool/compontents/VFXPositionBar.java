@@ -54,7 +54,7 @@ public class VFXPositionBar extends HBox {
     }
 
     public void reset() {
-        timeInDate.setTime(0);
+        update(0);
         timeBar.setDisable(true);
     }
 }
