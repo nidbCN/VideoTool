@@ -16,8 +16,9 @@ public class MainApplication extends Application {
 
         var scene = new Scene(loader.load(), 1280, 600);
         scene.getStylesheets().addAll(
+                Objects.requireNonNull(getClass().getResource("styles/Global.css")).toExternalForm(),
                 Objects.requireNonNull(getClass().getResource("styles/Button.css")).toExternalForm(),
-                Objects.requireNonNull(getClass().getResource("styles/GlowSansSC.css")).toExternalForm()
+                Objects.requireNonNull(getClass().getResource("styles/Fonts.css")).toExternalForm()
         );
 
         stage.setTitle("Video Tool!");

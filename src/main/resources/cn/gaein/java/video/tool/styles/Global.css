@@ -1,0 +1,11 @@
+.source-font {
+    -fx-font-family: "Source Han Sans CN";
+}
+
+.code-font {
+    -fx-font-family: "Cascadia Code";
+}
+
+Label#timeLabel {
+    -fx-font-family: "Cascadia Code";
+}

@@ -6,11 +6,13 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
+import javafx.scene.text.Font;
 import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class VFXPositionBar extends HBox {
     private final PositionProperty positionProperty;
@@ -23,15 +25,18 @@ public class VFXPositionBar extends HBox {
 
     public VFXPositionBar(EmbeddedMediaPlayer player) {
         setPadding(new Insets(8, 2, 8, 4));
-        setSpacing(4);
-
-        timeBar.setDisable(true);
-        timeBar.setPopupSupplier(Region::new);
-        timeBar.setPrefWidth(616);
+        setSpacing(8);
 
         positionProperty = new PositionProperty(player);
 
+        timeBar.setDisable(true);
+        timeBar.setPopupSupplier(Region::new);
+        timeBar.setPrefWidth(600);
         timeBar.valueProperty().bindBidirectional(positionProperty);
+
+        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+        timeLabel.getStyleClass().add("code-font");
 
         getChildren().addAll(timeBar, timeLabel);
     }

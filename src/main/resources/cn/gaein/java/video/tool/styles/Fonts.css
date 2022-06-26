@@ -1,0 +1,11 @@
+/* ttf files are not supported */
+
+@font-face {
+    font-face-name: "Source Han Sans CN";
+    src: url("../fonts/SourceHanSansCN-Medium.otf");
+}
+
+@font-face {
+    font-face-name: "Cascadia Code";
+    src: url("../fonts/CascadiaCode-Regular.otf");
+}
