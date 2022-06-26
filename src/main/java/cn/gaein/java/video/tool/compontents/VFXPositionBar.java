@@ -25,20 +25,24 @@ public class VFXPositionBar extends HBox {
             = new SimpleDateFormat("HH:mm:ss:SSS", Locale.UK);
 
     public VFXPositionBar(EmbeddedMediaPlayer player) {
+        // self style
         setPadding(new Insets(8, 8, 0, 16));
         setSpacing(8);
         setStyle("-fx-background-color: white;");
         setEffect(MFXDepthManager.shadowOf(DepthLevel.LEVEL2));
 
-        positionProperty = new PositionProperty(player);
-
+        // timeBar style
         timeBar.setDisable(true);
         timeBar.setPopupSupplier(Region::new);
         timeBar.setPrefWidth(584);
+        // bind value to position
+        positionProperty = new PositionProperty(player);
         timeBar.valueProperty().bindBidirectional(positionProperty);
 
+        // init formatter
         formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
 
+        // timeLabel style
         timeLabel.getStyleClass().add("code-font");
 
         getChildren().addAll(timeBar, timeLabel);
@@ -48,21 +52,23 @@ public class VFXPositionBar extends HBox {
         return timeInDate.getTime();
     }
 
+    public void start() {
+        timeBar.setDisable(false);
+    }
+
     public void update(long timeInMillis) {
         timeInDate.setTime(timeInMillis);
 
-        if (timeBar.disabledProperty().get()) {
-            timeBar.setDisable(false);
-        }
-
         var text = formatter.format(timeInDate);
-
         timeLabel.setText(text);
+
         positionProperty.update();
     }
 
     public void reset() {
-        update(0);
+        positionProperty.set(0);
+        positionProperty.update();
+        timeLabel.setText("00:00:00:000");
         timeBar.setDisable(true);
     }
 }

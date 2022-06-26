@@ -28,8 +28,6 @@ import java.util.Objects;
 import static uk.co.caprica.vlcj.javafx.videosurface.ImageViewVideoSurfaceFactory.videoSurfaceForImageView;
 
 public class MainController {
-    private final MediaPlayerFactory mediaPlayerFactory = new MediaPlayerFactory();
-
     private final EmbeddedMediaPlayer mediaPlayer;
 
     @FXML
@@ -65,6 +63,7 @@ public class MainController {
     public VFXPositionBar displayPositionBar;
 
     public MainController() {
+        MediaPlayerFactory mediaPlayerFactory = new MediaPlayerFactory();
         mediaPlayer = mediaPlayerFactory.mediaPlayers().newEmbeddedMediaPlayer();
         mediaPlayer.events().addMediaPlayerEventListener(
                 new MediaPlayerEventAdapter() {
@@ -81,10 +80,17 @@ public class MainController {
                     }
 
                     @Override
+                    public void opening(MediaPlayer mediaPlayer) {
+                        displayPositionBar.start();
+                        displayStopBtn.setDisable(false);
+                    }
+
+                    @Override
                     public void stopped(MediaPlayer mediaPlayer) {
                         // set icon to play
                         displayCtrlIcon.setIconLiteral("mdi2p-play");
-                        resetDisplayView();
+                        Platform.runLater(displayPositionBar::reset);
+                        setDisplayView();
                     }
 
                     @Override
@@ -105,7 +111,7 @@ public class MainController {
         mediaPlayer.videoSurface().set(videoSurfaceForImageView(displayView));
         displayPositionBar = new VFXPositionBar(mediaPlayer);
         displayCtrlPane.getChildren().add(displayPositionBar);
-        resetDisplayView();
+        setDisplayView();
 
         // input file list
         var converter = FunctionalStringConverter.to(InputVideo::getDisplayName);
@@ -170,9 +176,9 @@ public class MainController {
         mediaPlayer.controls().stop();
     }
 
-    private void resetDisplayView() {
+    private void setDisplayView() {
         displayView.setImage(new Image(Objects.requireNonNull(
                 getClass().getResource("images/player_background.png")).toExternalForm()));
-        displayPositionBar.reset();
+        displayStopBtn.setDisable(true);
     }
 }
