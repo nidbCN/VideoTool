@@ -31,36 +31,40 @@ public class MainController {
     private final EmbeddedMediaPlayer mediaPlayer;
 
     @FXML
-    public MFXListView<InputVideo> inputFileList;
+    private MFXListView<InputVideo> inputFileList;
     @FXML
-    public BorderPane displayViewPane;
+    private BorderPane displayViewPane;
     @FXML
-    public ImageView displayView = new ImageView();
+    private final ImageView displayView = new ImageView();
     @FXML
-    public MFXButton flagStartBtn;
+    private MFXButton flagStartBtn;
     @FXML
-    public MFXButton flagEndBtn;
+    private MFXButton flagEndBtn;
     @FXML
-    public MFXButton flagEditBtn;
+    private MFXButton flagEditBtn;
     @FXML
-    public MFXButton flagCancelBtn;
+    private MFXButton flagCancelBtn;
     @FXML
-    public MFXListView outputFileList;
+    private MFXListView outputFileList;
     @FXML
-    public MFXButton exportOutputBtn;
+    private MFXButton exportOutputBtn;
     @FXML
-    public MFXButton inputAddBtn;
+    private MFXButton inputAddBtn;
     @FXML
-    public MFXButton inputRemoveBtn;
+    private MFXButton inputRemoveBtn;
     @FXML
-    public FontIcon displayCtrlIcon;
+    private FontIcon displayCtrlIcon;
     @FXML
-    public MFXButton displayCtrlBtn;
+    private MFXButton displayCtrlBtn;
     @FXML
-    public MFXButton displayStopBtn;
+    private MFXButton displayStopBtn;
     @FXML
-    public StackPane displayCtrlPane;
-    public VFXPositionBar displayPositionBar;
+    private StackPane displayCtrlPane;
+    private VFXPositionBar displayPositionBar;
+    @FXML
+    private MFXButton outputMoveUpBtn;
+    @FXML
+    private MFXButton outputMoveDownBtn;
 
     public MainController() {
         MediaPlayerFactory mediaPlayerFactory = new MediaPlayerFactory();
@@ -100,7 +104,7 @@ public class MainController {
                 });
     }
 
-    @FXML
+
     private void initialize() {
         // center player
         displayView.fitWidthProperty().bind(displayViewPane.widthProperty());
