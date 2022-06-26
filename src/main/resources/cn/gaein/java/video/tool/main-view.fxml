@@ -4,7 +4,7 @@
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
 <?import io.github.palexdev.materialfx.controls.MFXListView?>
-<?import io.github.palexdev.materialfx.controls.MFXSlider?>
+
 <StackPane xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
            fx:controller="cn.gaein.java.video.tool.controllers.MainController">
@@ -35,26 +35,25 @@
                     </BorderPane>
                 </Pane>
                 <HBox spacing="4">
-                    <MFXButton fx:id="displayCtrlBtn" buttonType="RAISED" styleClass="primary"
+                    <MFXButton fx:id="displayCtrlBtn" buttonType="RAISED" styleClass="normal"
                                prefWidth="32" prefHeight="32" text=""
                                onMouseClicked="#onCtrlDisplayClick">
                         <graphic>
-                            <FontIcon fx:id="displayCtrlIcon" iconColor="white" iconSize="24"
+                            <FontIcon fx:id="displayCtrlIcon" iconColor="#7a0ed9" iconSize="24"
                                       iconLiteral="mdi2p-play"/>
                         </graphic>
                     </MFXButton>
-                    <MFXButton fx:id="displayStopBtn" buttonType="RAISED" styleClass="primary"
+                    <MFXButton fx:id="displayStopBtn" buttonType="RAISED" styleClass="normal"
                                prefWidth="32" prefHeight="32" text=""
                                onMouseClicked="#onStopDisplayClick">
                         <graphic>
-                            <FontIcon iconLiteral="mdi2s-stop" iconColor="white" iconSize="24"/>
+                            <FontIcon iconLiteral="mdi2s-stop" iconColor="#7a0ed9" iconSize="24"/>
                         </graphic>
                     </MFXButton>
-                    <StackPane>
+                    <StackPane fx:id="displayCtrlPane">
                         <padding>
                             <Insets top="4" bottom="4" left="4" right="4"/>
                         </padding>
-                        <MFXSlider BorderPane.alignment="CENTER" prefWidth="640"/>
                     </StackPane>
                 </HBox>
             </VBox>
