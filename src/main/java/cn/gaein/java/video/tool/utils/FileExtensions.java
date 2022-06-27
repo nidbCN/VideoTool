@@ -9,6 +9,9 @@ import java.util.Iterator;
 import java.util.List;
 
 public final class FileExtensions {
+    public static final FileChooser.ExtensionFilter allVideo =
+            new FileChooser.ExtensionFilter("所有支持的视频格式",
+                    "*.avi;*.f4v;*.flv;*.m2ts;*.mkv;*.mov;*.mp4;*.mp4v;*.mpeg4;*.rm;*.rmvb;*.ts;*.webm");
     public static final FileChooser.ExtensionFilter avi =
             new FileChooser.ExtensionFilter("音频视频交错格式", "*.avi");
     public static final FileChooser.ExtensionFilter f4v =
@@ -37,6 +40,6 @@ public final class FileExtensions {
             new FileChooser.ExtensionFilter("开放网络媒体格式", "*.webm");
 
     public static Collection<FileChooser.ExtensionFilter> getVideoExtensions() {
-        return List.of(avi, f4v, flv, m2ts, mkv, mov, mp4, mp4v, mpeg4, rm, rmvb, ts, webm);
+        return List.of(allVideo, avi, f4v, flv, m2ts, mkv, mov, mp4, mp4v, mpeg4, rm, rmvb, ts, webm);
     }
 }

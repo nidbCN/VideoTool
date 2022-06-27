@@ -11,6 +11,7 @@ import io.github.palexdev.materialfx.effects.MFXDepthManager;
 import io.github.palexdev.materialfx.utils.others.FunctionalStringConverter;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -23,11 +24,13 @@ import uk.co.caprica.vlcj.player.base.MediaPlayer;
 import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter;
 import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
 
-import java.util.Objects;
-
 import static uk.co.caprica.vlcj.javafx.videosurface.ImageViewVideoSurfaceFactory.videoSurfaceForImageView;
 
-public class MainController {
+import java.net.URL;
+import java.util.Objects;
+import java.util.ResourceBundle;
+
+public class MainController implements Initializable {
     private final EmbeddedMediaPlayer mediaPlayer;
 
     @FXML
@@ -85,7 +88,6 @@ public class MainController {
 
                     @Override
                     public void opening(MediaPlayer mediaPlayer) {
-                        displayPositionBar.start();
                         displayStopBtn.setDisable(false);
                     }
 
@@ -93,19 +95,13 @@ public class MainController {
                     public void stopped(MediaPlayer mediaPlayer) {
                         // set icon to play
                         displayCtrlIcon.setIconLiteral("mdi2p-play");
-                        Platform.runLater(displayPositionBar::reset);
                         setDisplayView();
-                    }
-
-                    @Override
-                    public void timeChanged(MediaPlayer mediaPlayer, long newTime) {
-                        Platform.runLater(() -> displayPositionBar.update(newTime));
                     }
                 });
     }
 
-
-    private void initialize() {
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
         // center player
         displayView.fitWidthProperty().bind(displayViewPane.widthProperty());
         displayView.fitHeightProperty().bind(displayViewPane.heightProperty());
@@ -131,8 +127,8 @@ public class MainController {
 
         chooser.setTitle("导入视频文件");
         chooser.getExtensionFilters().addAll(FileExtensions.getVideoExtensions());
-        var fileList = chooser.showOpenMultipleDialog(new Stage());
 
+        var fileList = chooser.showOpenMultipleDialog(new Stage());
         if (fileList == null)
             return;
 
