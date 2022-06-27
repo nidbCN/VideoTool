@@ -102,7 +102,6 @@ public class PositionProperty extends DoubleProperty {
     @Override
     public double get() {
         var position = player.status().position();
-        System.out.println(position);
         return position < 0 ? 0 : position * PRECISION;
     }
 
