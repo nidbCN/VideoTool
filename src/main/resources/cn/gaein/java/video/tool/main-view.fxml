@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.layout.*?>
-<?import javafx.geometry.Insets?>
-<?import org.kordamp.ikonli.javafx.FontIcon?>
-<?import io.github.palexdev.materialfx.controls.MFXButton?>
-<?import io.github.palexdev.materialfx.controls.MFXListView?>
 
+<?import io.github.palexdev.materialfx.controls.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.*?>
 <StackPane xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
            fx:controller="cn.gaein.java.video.tool.controllers.MainController">
@@ -58,13 +57,15 @@
             </VBox>
             <HBox spacing="16">
                 <MFXButton fx:id="flagStartBtn" buttonType="RAISED" styleClass="primary, source-font"
-                           prefWidth="96" prefHeight="32" text="片段开始">
+                           prefWidth="96" prefHeight="32" text="片段开始"
+                           onMouseClicked="#onFlagStartClick">
                     <graphic>
                         <FontIcon iconColor="white" iconLiteral="mdi2f-flag-plus"/>
                     </graphic>
                 </MFXButton>
-                <MFXButton fx:id="flagEndBtn" buttonType="RAISED" styleClass="primary, source-font"
-                           prefWidth="96" prefHeight="32" text="片段结束">
+                <MFXButton fx:id="flagCompleteBtn" buttonType="RAISED" styleClass="primary, source-font"
+                           prefWidth="96" prefHeight="32" text="片段结束"
+                           onMouseClicked="#onFlagCompleteClicked">
                     <graphic>
                         <FontIcon iconColor="white" iconLiteral="mdi2f-flag"/>
                     </graphic>

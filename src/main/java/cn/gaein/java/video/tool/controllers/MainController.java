@@ -1,8 +1,9 @@
 package cn.gaein.java.video.tool.controllers;
 
-import cn.gaein.java.video.tool.compontents.VFXPositionBar;
-import cn.gaein.java.video.tool.models.InputVideo;
-import cn.gaein.java.video.tool.models.InputVideoCell;
+import cn.gaein.java.video.tool.compontents.PositionBar;
+import cn.gaein.java.video.tool.compontents.VideoCell;
+import cn.gaein.java.video.tool.models.Video;
+import cn.gaein.java.video.tool.models.VideoFragment;
 import cn.gaein.java.video.tool.utils.FileExtensions;
 import cn.gaein.java.video.tool.videosurface.PixelBufferVideoSurface;
 import io.github.palexdev.materialfx.controls.MFXButton;
@@ -10,7 +11,6 @@ import io.github.palexdev.materialfx.controls.MFXListView;
 import io.github.palexdev.materialfx.effects.DepthLevel;
 import io.github.palexdev.materialfx.effects.MFXDepthManager;
 import io.github.palexdev.materialfx.utils.others.FunctionalStringConverter;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.image.Image;
@@ -29,11 +29,14 @@ import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+/**
+ * @author Gaein
+ */
 public class MainController implements Initializable {
     private final EmbeddedMediaPlayer mediaPlayer;
 
     @FXML
-    private MFXListView<InputVideo> inputFileList;
+    private MFXListView<Video> inputFileList;
     @FXML
     private BorderPane displayViewPane;
     @FXML
@@ -41,7 +44,7 @@ public class MainController implements Initializable {
     @FXML
     private MFXButton flagStartBtn;
     @FXML
-    private MFXButton flagEndBtn;
+    private MFXButton flagCompleteBtn;
     @FXML
     private MFXButton flagEditBtn;
     @FXML
@@ -62,14 +65,14 @@ public class MainController implements Initializable {
     private MFXButton displayStopBtn;
     @FXML
     private StackPane displayCtrlPane;
-    private VFXPositionBar displayPositionBar;
+    private PositionBar displayPositionBar;
     @FXML
     private MFXButton outputMoveUpBtn;
     @FXML
     private MFXButton outputMoveDownBtn;
 
     public MainController() {
-        MediaPlayerFactory mediaPlayerFactory = new MediaPlayerFactory();
+        var mediaPlayerFactory = new MediaPlayerFactory();
         mediaPlayer = mediaPlayerFactory.mediaPlayers().newEmbeddedMediaPlayer();
         mediaPlayer.events().addMediaPlayerEventListener(
                 new MediaPlayerEventAdapter() {
@@ -92,7 +95,6 @@ public class MainController implements Initializable {
 
                     @Override
                     public void stopped(MediaPlayer mediaPlayer) {
-                        // set icon to play
                         displayCtrlIcon.setIconLiteral("mdi2p-play");
                         setDisplayView();
                     }
@@ -109,14 +111,14 @@ public class MainController implements Initializable {
         displayViewPane.setEffect(MFXDepthManager.shadowOf(DepthLevel.LEVEL2));
         mediaPlayer.videoSurface().set(
                 PixelBufferVideoSurface.pixelBufferVideoSurfaceForImageView(displayView));
-        displayPositionBar = new VFXPositionBar(mediaPlayer);
+        displayPositionBar = new PositionBar(mediaPlayer);
         displayCtrlPane.getChildren().add(displayPositionBar);
         setDisplayView();
 
         // input file list
-        var converter = FunctionalStringConverter.to(InputVideo::getDisplayName);
+        var converter = FunctionalStringConverter.to(Video::getDisplayName);
         inputFileList.setConverter(converter);
-        inputFileList.setCellFactory(v -> new InputVideoCell(inputFileList, v));
+        inputFileList.setCellFactory(v -> new VideoCell(inputFileList, v));
     }
 
     @FXML
@@ -129,11 +131,12 @@ public class MainController implements Initializable {
         chooser.getExtensionFilters().addAll(FileExtensions.getVideoExtensions());
 
         var fileList = chooser.showOpenMultipleDialog(new Stage());
-        if (fileList == null)
+        if (fileList == null) {
             return;
+        }
 
         fileList.forEach(f -> {
-            var video = new InputVideo(f);
+            var video = new Video(f);
             var index = inputFileListArr.size();
 
             inputFileListArr.add(index, video);
@@ -141,7 +144,8 @@ public class MainController implements Initializable {
             var item = inputFileList.getCell(index);
             item.setOnMouseClicked(e -> {
                 // video item clicked
-                mediaPlayer.media().play(video.getFile().getPath());
+                mediaPlayer.media().play(
+                        video.getFile().getPath(), "play-and-pause");  // pause before finished
                 displayCtrlIcon.setIconLiteral("mdi2p-pause");
             });
         });
@@ -174,6 +178,33 @@ public class MainController implements Initializable {
     @FXML
     protected void onStopDisplayClick() {
         mediaPlayer.controls().stop();
+    }
+
+
+    private VideoFragment fragmentInEdit;
+
+    @FXML
+    protected void onFlagStartClick() {
+        var selectedList = inputFileList.getSelectionModel().getSelectedValues();
+        if (selectedList.size() < 1) {
+            // no item selected
+            return;
+        }
+
+        var video = selectedList.get(0);
+        video.startFragment(displayPositionBar.getVideoTime());
+    }
+
+    @FXML
+    protected void onFlagCompleteClicked() {
+        var selectedList = inputFileList.getSelectionModel().getSelectedValues();
+        if (selectedList.size() < 1) {
+            // no item selected
+            return;
+        }
+
+        var video = selectedList.get(0);
+        fragmentInEdit = video.completeFragment(displayPositionBar.getVideoTime());
     }
 
     private void setDisplayView() {
