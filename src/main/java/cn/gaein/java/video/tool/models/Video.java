@@ -1,19 +1,21 @@
 package cn.gaein.java.video.tool.models;
 
-import net.bramp.ffmpeg.FFmpeg;
 import net.bramp.ffmpeg.builder.FFmpegBuilder;
 
 import java.io.File;
 
-public class InputVideo {
+/**
+ * @author Gaein
+ */
+public class Video {
     private final File file;
     private final FFmpegBuilder builder = new FFmpegBuilder();
 
-    public InputVideo(File inputFile) {
+    public Video(File inputFile) {
         file = inputFile;
     }
 
-    public InputVideo(String path) {
+    public Video(String path) {
         file = new File(path);
         builder.setInput(file.getPath());
     }
@@ -27,7 +29,7 @@ public class InputVideo {
     }
 
     public String getDisplayName() {
-        var LENGTH = 15;
+        var length = 15;
 
         var fullName = file.getName();
         var extIndex = fullName.lastIndexOf('.');
@@ -36,10 +38,10 @@ public class InputVideo {
 
         var builder = new StringBuilder(fullName.length());
 
-        if (pureName.length() <= LENGTH) {
+        if (pureName.length() <= length) {
             builder.append(fullName);
         } else {
-            builder.append(pureName, 0, LENGTH - 6);
+            builder.append(pureName, 0, length - 6);
             builder.append("...");
             builder.append(pureName, pureName.length() - 3, pureName.length() - 1);
             builder.append(extName);
@@ -48,12 +50,12 @@ public class InputVideo {
         return builder.toString();
     }
 
+    public FFmpegBuilder getBuilder() {
+        return builder;
+    }
+
     @Override
     public String toString() {
         return getDisplayName();
-    }
-
-    public FFmpegBuilder getBuilder() {
-        return builder;
     }
 }

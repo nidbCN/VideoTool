@@ -1,6 +1,7 @@
 package cn.gaein.java.video.tool.compontents;
 
 import cn.gaein.java.video.tool.compontents.beans.PositionProperty;
+import cn.gaein.java.video.tool.models.VideoTime;
 import io.github.palexdev.materialfx.controls.MFXSlider;
 import io.github.palexdev.materialfx.effects.DepthLevel;
 import io.github.palexdev.materialfx.effects.MFXDepthManager;
@@ -14,21 +15,16 @@ import uk.co.caprica.vlcj.player.base.MediaPlayer;
 import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter;
 import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-import java.util.TimeZone;
-
-public class ComponentPositionBar extends HBox {
+/**
+ * @author Gaein
+ */
+public class PositionBar extends HBox {
     private final PositionProperty positionProperty;
     private final Label timeLabel = new Label();
     private final MFXSlider timeBar = new MFXSlider(0, 10000, 0);
+    private final VideoTime videoTime = new VideoTime();
 
-    private final Date timeInDate = new Date();
-    private final SimpleDateFormat formatter
-            = new SimpleDateFormat("HH:mm:ss:SSS", Locale.UK);
-
-    public ComponentPositionBar(EmbeddedMediaPlayer player) {
+    public PositionBar(EmbeddedMediaPlayer player) {
         // self style
         setPadding(new Insets(2, 8, 2, 16));
         setSpacing(8);
@@ -61,9 +57,6 @@ public class ComponentPositionBar extends HBox {
                     }
                 });
 
-        // init formatter
-        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
-
         // timeLabel style
         timeLabel.getStyleClass().add("code-font");
 
@@ -83,19 +76,19 @@ public class ComponentPositionBar extends HBox {
     private void initSet() {
         positionProperty.set(0);
         positionProperty.update();
-        timeLabel.setText("00:00:00:000");
+
+        videoTime.setTime(0);
+        timeLabel.setText(videoTime.toLongString());
         timeBar.setDisable(true);
     }
 
-    public long getTime() {
-        return timeInDate.getTime();
+    public VideoTime getVideoTime() {
+        return videoTime;
     }
 
     public void update(long timeInMillis) {
-        timeInDate.setTime(timeInMillis);
-
-        var text = formatter.format(timeInDate);
-        timeLabel.setText(text);
+        videoTime.setTime(timeInMillis);
+        timeLabel.setText(videoTime.toLongString());
 
         positionProperty.update();
     }

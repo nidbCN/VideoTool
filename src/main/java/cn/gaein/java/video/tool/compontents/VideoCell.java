@@ -8,10 +8,10 @@ import io.github.palexdev.materialfx.font.MFXFontIcon;
 /**
  * @author Gaein
  */
-public class ComponentVideoCell extends MFXListCell<Video> {
+public class VideoCell extends MFXListCell<Video> {
     private final MFXFontIcon videoIcon;
 
-    public ComponentVideoCell(MFXListView<Video> listView, Video video) {
+    public VideoCell(MFXListView<Video> listView, Video video) {
         super(listView, video);
 
         videoIcon = new MFXFontIcon("mfx-video", 18);
