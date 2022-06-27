@@ -22,7 +22,7 @@ import java.util.TimeZone;
 public class VFXPositionBar extends HBox {
     private final PositionProperty positionProperty;
     private final Label timeLabel = new Label();
-    private final MFXSlider timeBar = new MFXSlider(0, 1000, 0);
+    private final MFXSlider timeBar = new MFXSlider(0, 10000, 0);
 
     private final Date timeInDate = new Date();
     private final SimpleDateFormat formatter
