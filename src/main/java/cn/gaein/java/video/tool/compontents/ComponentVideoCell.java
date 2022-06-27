@@ -1,13 +1,17 @@
-package cn.gaein.java.video.tool.models;
+package cn.gaein.java.video.tool.compontents;
 
+import cn.gaein.java.video.tool.models.Video;
 import io.github.palexdev.materialfx.controls.MFXListView;
 import io.github.palexdev.materialfx.controls.cell.MFXListCell;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 
-public class InputVideoCell extends MFXListCell<InputVideo> {
+/**
+ * @author Gaein
+ */
+public class ComponentVideoCell extends MFXListCell<Video> {
     private final MFXFontIcon videoIcon;
 
-    public InputVideoCell(MFXListView<InputVideo> listView, InputVideo video) {
+    public ComponentVideoCell(MFXListView<Video> listView, Video video) {
         super(listView, video);
 
         videoIcon = new MFXFontIcon("mfx-video", 18);
@@ -16,7 +20,7 @@ public class InputVideoCell extends MFXListCell<InputVideo> {
     }
 
     @Override
-    protected void render(InputVideo data) {
+    protected void render(Video data) {
         super.render(data);
 
         if (videoIcon != null) {

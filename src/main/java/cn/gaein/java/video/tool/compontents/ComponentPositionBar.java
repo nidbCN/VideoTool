@@ -19,7 +19,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
-public class VFXPositionBar extends HBox {
+public class ComponentPositionBar extends HBox {
     private final PositionProperty positionProperty;
     private final Label timeLabel = new Label();
     private final MFXSlider timeBar = new MFXSlider(0, 10000, 0);
@@ -28,7 +28,7 @@ public class VFXPositionBar extends HBox {
     private final SimpleDateFormat formatter
             = new SimpleDateFormat("HH:mm:ss:SSS", Locale.UK);
 
-    public VFXPositionBar(EmbeddedMediaPlayer player) {
+    public ComponentPositionBar(EmbeddedMediaPlayer player) {
         // self style
         setPadding(new Insets(2, 8, 2, 16));
         setSpacing(8);
