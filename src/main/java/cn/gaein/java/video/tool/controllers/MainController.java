@@ -4,6 +4,7 @@ import cn.gaein.java.video.tool.compontents.VFXPositionBar;
 import cn.gaein.java.video.tool.models.InputVideo;
 import cn.gaein.java.video.tool.models.InputVideoCell;
 import cn.gaein.java.video.tool.utils.FileExtensions;
+import cn.gaein.java.video.tool.videosurface.PixelBufferVideoSurface;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXListView;
 import io.github.palexdev.materialfx.effects.DepthLevel;
@@ -23,8 +24,6 @@ import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
 import uk.co.caprica.vlcj.player.base.MediaPlayer;
 import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter;
 import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
-
-import static uk.co.caprica.vlcj.javafx.videosurface.ImageViewVideoSurfaceFactory.videoSurfaceForImageView;
 
 import java.net.URL;
 import java.util.Objects;
@@ -108,7 +107,8 @@ public class MainController implements Initializable {
         displayView.setPreserveRatio(true);
         displayViewPane.setCenter(displayView);
         displayViewPane.setEffect(MFXDepthManager.shadowOf(DepthLevel.LEVEL2));
-        mediaPlayer.videoSurface().set(videoSurfaceForImageView(displayView));
+        mediaPlayer.videoSurface().set(
+                PixelBufferVideoSurface.pixelBufferVideoSurfaceForImageView(displayView));
         displayPositionBar = new VFXPositionBar(mediaPlayer);
         displayCtrlPane.getChildren().add(displayPositionBar);
         setDisplayView();
