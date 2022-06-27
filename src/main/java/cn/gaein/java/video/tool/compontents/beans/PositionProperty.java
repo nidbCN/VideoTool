@@ -68,6 +68,7 @@ public class PositionProperty extends DoubleProperty {
             // no-pe
         }
     };
+    private static final int PRECISION = 10000;
 
     public PositionProperty(MediaPlayer player) {
         this.player = player;
@@ -101,7 +102,8 @@ public class PositionProperty extends DoubleProperty {
     @Override
     public double get() {
         var position = player.status().position();
-        return position < 0 ? 0 : position * 1000;
+        System.out.println(position);
+        return position < 0 ? 0 : position * PRECISION;
     }
 
     @Override
@@ -110,7 +112,7 @@ public class PositionProperty extends DoubleProperty {
             value = newValue;
         }
 
-        player.controls().setPosition((float) (value / 1000));
+        player.controls().setPosition((float) (value / PRECISION));
     }
 
     @Override
