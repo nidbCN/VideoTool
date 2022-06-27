@@ -19,6 +19,13 @@ public class VideoTime {
         setTime(time);
     }
 
+    public VideoTime(int hour, int minute, int second, int millSec) {
+        this.hour = hour;
+        this.minute = minute;
+        this.second = second;
+        this.millSec = millSec;
+    }
+
     public String toLongString() {
         return String.format("%02d:%02d:%02d.%03d", hour, minute, second, millSec);
     }
@@ -29,6 +36,10 @@ public class VideoTime {
 
     public long getTime() {
         return time;
+    }
+
+    public VideoTime getVideoTime() {
+        return new VideoTime(this.hour, this.minute, this.second, this.millSec);
     }
 
     public void setTime(long time) {

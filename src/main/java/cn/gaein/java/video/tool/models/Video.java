@@ -1,23 +1,22 @@
 package cn.gaein.java.video.tool.models;
 
-import net.bramp.ffmpeg.builder.FFmpegBuilder;
-
 import java.io.File;
+import java.util.ArrayList;
 
 /**
  * @author Gaein
  */
 public class Video {
     private final File file;
-    private final FFmpegBuilder builder = new FFmpegBuilder();
+    private final ArrayList<VideoFragment> fragments = new ArrayList<>();
+    private VideoFragment fragmentNotComplete;
 
     public Video(File inputFile) {
         file = inputFile;
     }
 
     public Video(String path) {
-        file = new File(path);
-        builder.setInput(file.getPath());
+        this(new File(path));
     }
 
     public File getFile() {
@@ -50,8 +49,39 @@ public class Video {
         return builder.toString();
     }
 
-    public FFmpegBuilder getBuilder() {
-        return builder;
+    public ArrayList<VideoFragment> getFragments() {
+        return fragments;
+    }
+
+    public boolean startFragment(VideoTime startTime) {
+        if (fragmentNotComplete != null) {
+            return false;
+        }
+
+        fragmentNotComplete = new VideoFragment(this, startTime);
+        return true;
+    }
+
+    public VideoFragment completeFragment(VideoTime endTime) {
+        if (fragmentNotComplete == null) {
+            return null;
+        }
+        if (endTime.getTime() < fragmentNotComplete.getStartTime().getTime()) {
+            return null;
+        }
+
+        var result = fragmentNotComplete;
+        result.setEndTime(endTime);
+        fragments.add(result);
+
+        fragmentNotComplete = null;
+        return result;
+    }
+
+    public void deprecateFragment() {
+        if (fragmentNotComplete != null) {
+            fragmentNotComplete = null;
+        }
     }
 
     @Override

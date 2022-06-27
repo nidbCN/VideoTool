@@ -83,7 +83,7 @@ public class PositionBar extends HBox {
     }
 
     public VideoTime getVideoTime() {
-        return videoTime;
+        return videoTime.getVideoTime();
     }
 
     public void update(long timeInMillis) {
