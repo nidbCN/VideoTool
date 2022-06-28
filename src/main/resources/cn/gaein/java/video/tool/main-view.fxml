@@ -4,6 +4,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.*?>
 <?import org.kordamp.ikonli.javafx.*?>
+<?import cn.gaein.java.video.tool.compontents.PlayerView?>
 <StackPane xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
            fx:controller="cn.gaein.java.video.tool.controllers.MainController">
@@ -31,30 +32,7 @@
             </HBox>
         </VBox>
         <VBox spacing="16">
-            <VBox spacing="4">
-                <BorderPane fx:id="displayViewPane"
-                            prefWidth="800" prefHeight="450"
-                            style="-fx-background-color: black">
-                </BorderPane>
-                <HBox spacing="4">
-                    <MFXButton fx:id="displayCtrlBtn" buttonType="RAISED" styleClass="normal"
-                               prefWidth="32" prefHeight="32" text=""
-                               onMouseClicked="#onCtrlDisplayClick">
-                        <graphic>
-                            <FontIcon fx:id="displayCtrlIcon" iconColor="#7a0ed9" iconSize="24"
-                                      iconLiteral="mdi2p-play"/>
-                        </graphic>
-                    </MFXButton>
-                    <MFXButton fx:id="displayStopBtn" buttonType="RAISED" styleClass="normal"
-                               prefWidth="32" prefHeight="32" text=""
-                               onMouseClicked="#onStopDisplayClick">
-                        <graphic>
-                            <FontIcon iconLiteral="mdi2s-stop" iconColor="#7a0ed9" iconSize="24"/>
-                        </graphic>
-                    </MFXButton>
-                    <StackPane fx:id="displayCtrlPane"/>
-                </HBox>
-            </VBox>
+            <PlayerView fx:id="playerView"/>
             <HBox spacing="16">
                 <MFXButton fx:id="flagStartBtn" buttonType="RAISED" styleClass="primary, source-font"
                            prefWidth="96" prefHeight="32" text="片段开始"
