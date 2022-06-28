@@ -11,6 +11,7 @@ module cn.gaein.video.videotool {
 
     exports cn.gaein.java.video.tool;
     exports cn.gaein.java.video.tool.compontents;
+    exports cn.gaein.java.video.tool.compontents.cell;
     exports cn.gaein.java.video.tool.controllers;
     exports cn.gaein.java.video.tool.models;
 

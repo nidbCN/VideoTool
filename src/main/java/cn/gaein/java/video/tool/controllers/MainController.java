@@ -1,7 +1,7 @@
 package cn.gaein.java.video.tool.controllers;
 
 import cn.gaein.java.video.tool.compontents.PlayerView;
-import cn.gaein.java.video.tool.compontents.VideoCell;
+import cn.gaein.java.video.tool.compontents.cell.VideoCell;
 import cn.gaein.java.video.tool.models.Video;
 import cn.gaein.java.video.tool.models.VideoFragment;
 import cn.gaein.java.video.tool.utils.FileExtensions;
