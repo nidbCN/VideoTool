@@ -58,7 +58,7 @@ public class Video {
             return false;
         }
 
-        fragmentNotComplete = new VideoFragment(this, startTime);
+        fragmentNotComplete = new VideoFragment(this, startTime, fragments.size() + 1);
         return true;
     }
 

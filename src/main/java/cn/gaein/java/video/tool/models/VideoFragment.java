@@ -10,19 +10,21 @@ import java.util.function.Consumer;
 public class VideoFragment {
     private final Video video;
     private final FFmpegBuilder builder = new FFmpegBuilder();
+    private final int fragmentId;
     private VideoTime startTime;
     private VideoTime endTime;
 
-    public VideoFragment(Video video) {
-        this(video, null, null);
+    public VideoFragment(Video video, int fragmentId) {
+        this(video, fragmentId, null, null);
     }
 
-    public VideoFragment(Video video, VideoTime startTime) {
-        this(video, startTime, null);
+    public VideoFragment(Video video, VideoTime startTime, int fragmentId) {
+        this(video, fragmentId, startTime, null);
     }
 
-    public VideoFragment(Video video, VideoTime startTime, VideoTime endTime) {
+    public VideoFragment(Video video, int fragmentId, VideoTime startTime, VideoTime endTime) {
         this.video = video;
+        this.fragmentId = fragmentId;
         this.startTime = startTime;
         this.endTime = endTime;
     }
