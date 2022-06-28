@@ -10,6 +10,8 @@ import io.github.palexdev.materialfx.effects.DepthLevel;
 import io.github.palexdev.materialfx.effects.MFXDepthManager;
 import io.github.palexdev.materialfx.enums.ButtonType;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -32,6 +34,12 @@ public class PlayerView extends VBox {
     private EmbeddedMediaPlayer player;
     private Video video;
     private final VideoTime time = new VideoTime();
+    private final StringProperty timeString
+            = new SimpleStringProperty("00:00:00.000");
+
+    public StringProperty timeStringProperty() {
+        return timeString;
+    }
 
     private final PositionProperty position;
     private final ImageView displayView = new ImageView();
@@ -85,50 +93,50 @@ public class PlayerView extends VBox {
         displayView.fitHeightProperty().bind(displayPane.heightProperty());
         displayView.setPreserveRatio(true);
         player = playerFactory.mediaPlayers().newEmbeddedMediaPlayer();
-        player.events().addMediaPlayerEventListener(new MediaPlayerEventAdapter() {
-            @Override
-            public void opening(MediaPlayer mediaPlayer) {
-                Platform.runLater(() -> {
-                    timeBar.setDisable(false);
-                    displayStopBtn.setDisable(false);
+        player.events().addMediaPlayerEventListener(
+                new MediaPlayerEventAdapter() {
+                    @Override
+                    public void opening(MediaPlayer mediaPlayer) {
+                        Platform.runLater(() -> {
+                            timeBar.setDisable(false);
+                            displayStopBtn.setDisable(false);
+                        });
+                    }
+
+                    @Override
+                    public void playing(MediaPlayer mediaPlayer) {
+                        // set icon to pause
+                        Platform.runLater(() ->
+                                displayCtrlIcon.setIconLiteral("mdi2p-pause"));
+                    }
+
+                    @Override
+                    public void paused(MediaPlayer mediaPlayer) {
+                        // set icon to play
+                        Platform.runLater(() ->
+                                displayCtrlIcon.setIconLiteral("mdi2p-play"));
+                    }
+
+                    @Override
+                    public void stopped(MediaPlayer mediaPlayer) {
+                        Platform.runLater(() -> {
+                            displayCtrlIcon.setIconLiteral("mdi2p-play");
+                            resetDisplayView();
+                            resetPositionAndTimeBar();
+                        });
+                    }
+
+                    @Override
+                    public void timeChanged(MediaPlayer mediaPlayer, long newTime) {
+                        Platform.runLater(() -> {
+                            time.setTime(newTime);
+                            timeString.set(time.toLongString());
+
+                            position.update();
+                        });
+
+                    }
                 });
-            }
-
-            @Override
-            public void playing(MediaPlayer mediaPlayer) {
-                // set icon to pause
-                Platform.runLater(() ->
-                        displayCtrlIcon.setIconLiteral("mdi2p-pause"));
-            }
-
-            @Override
-            public void paused(MediaPlayer mediaPlayer) {
-                // set icon to play
-                Platform.runLater(() ->
-                        displayCtrlIcon.setIconLiteral("mdi2p-play"));
-            }
-
-            @Override
-            public void stopped(MediaPlayer mediaPlayer) {
-                Platform.runLater(() -> {
-                    displayCtrlIcon.setIconLiteral("mdi2p-play");
-                    resetDisplayView();
-                    resetPositionAndTimeBar();
-                });
-            }
-
-            @Override
-            public void timeChanged(MediaPlayer mediaPlayer, long newTime) {
-
-                // TODO: bind text to VideoTime.longStringProperty
-                Platform.runLater(() -> {
-                    time.setTime(newTime);
-                    timeLabel.setText(time.toLongString());
-                    position.update();
-                });
-
-            }
-        });
         player.videoSurface().set(
                 PixelBufferVideoSurface.pixelBufferVideoSurfaceForImageView(displayView)
         );
@@ -159,10 +167,12 @@ public class PlayerView extends VBox {
         ));
         positionBar.setEffect(MFXDepthManager.shadowOf(DepthLevel.LEVEL2));
 
+        timeString.set(time.toLongString());
         timeBar.setPopupSupplier(Region::new);
         timeBar.setPrefWidth(584);
         timeBar.valueProperty().bindBidirectional(position);
         timeLabel.getStyleClass().add("code-font");
+        timeLabel.textProperty().bind(timeString);
 
         positionBar.getChildren().addAll(
                 new BorderPane(timeBar),
@@ -184,7 +194,7 @@ public class PlayerView extends VBox {
         position.update();
 
         time.setTime(0);
-        timeLabel.setText(time.toLongString());
+        timeString.set(time.toLongString());
         timeBar.setDisable(true);
     }
 
