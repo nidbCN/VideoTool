@@ -9,12 +9,10 @@ import io.github.palexdev.materialfx.font.MFXFontIcon;
  * @author Gaein
  */
 public class VideoCell extends MFXListCell<Video> {
-    private final MFXFontIcon videoIcon;
+    private final MFXFontIcon videoIcon = new MFXFontIcon("mfx-video", 18);
 
     public VideoCell(MFXListView<Video> listView, Video video) {
         super(listView, video);
-
-        videoIcon = new MFXFontIcon("mfx-video", 18);
 
         render(video);
     }
@@ -23,6 +21,7 @@ public class VideoCell extends MFXListCell<Video> {
     protected void render(Video data) {
         super.render(data);
 
+        // first render is null
         if (videoIcon != null) {
             getChildren().add(0, videoIcon);
         }
