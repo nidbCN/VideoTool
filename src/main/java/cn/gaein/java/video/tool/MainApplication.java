@@ -1,6 +1,7 @@
 package cn.gaein.java.video.tool;
 
 import cn.gaein.java.video.tool.controllers.MainController;
+import cn.gaein.java.video.tool.helper.ResourceHelper;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -15,6 +16,12 @@ import java.util.Objects;
 public class MainApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
+        var resources = new ResourceHelper();
+
+        resources.setResourceLocation("source-font",
+                Objects.requireNonNull(getClass().getResource("fonts/SourceHanSansCN-Medium.otf")).toExternalForm()
+        );
+
         var loader = new FXMLLoader(
                 MainApplication.class.getResource("main-view.fxml"));
 
