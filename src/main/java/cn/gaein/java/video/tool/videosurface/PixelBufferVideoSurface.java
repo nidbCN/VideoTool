@@ -1,6 +1,6 @@
 package cn.gaein.java.video.tool.videosurface;
 
-import cn.gaein.java.video.tool.helper.Box;
+import cn.gaein.java.video.tool.helper.BoxHelper;
 import cn.gaein.java.video.tool.videosurface.callback.VideoBufferFormatCallback;
 import cn.gaein.java.video.tool.videosurface.callback.VideoRenderCallback;
 import javafx.scene.image.ImageView;
@@ -11,7 +11,7 @@ import uk.co.caprica.vlcj.player.embedded.videosurface.VideoSurfaceAdapters;
 import java.nio.ByteBuffer;
 
 public class PixelBufferVideoSurface extends CallbackVideoSurface {
-    public PixelBufferVideoSurface(ImageView view, Box<PixelBuffer<ByteBuffer>> bufferBox) {
+    public PixelBufferVideoSurface(ImageView view, BoxHelper<PixelBuffer<ByteBuffer>> bufferBox) {
         super(new VideoBufferFormatCallback(view, bufferBox),
                 new VideoRenderCallback(bufferBox),
                 true,
@@ -19,7 +19,7 @@ public class PixelBufferVideoSurface extends CallbackVideoSurface {
     }
 
     public static PixelBufferVideoSurface pixelBufferVideoSurfaceForImageView(ImageView view) {
-        var bufferBox = new Box<PixelBuffer<ByteBuffer>>();
+        var bufferBox = new BoxHelper<PixelBuffer<ByteBuffer>>();
         return new PixelBufferVideoSurface(view, bufferBox);
     }
 }

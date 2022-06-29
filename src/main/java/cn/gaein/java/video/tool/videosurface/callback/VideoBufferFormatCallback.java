@@ -1,8 +1,6 @@
 package cn.gaein.java.video.tool.videosurface.callback;
 
-import cn.gaein.java.video.tool.helper.Box;
-import cn.gaein.java.video.tool.videosurface.PixelBufferVideoSurface;
-import javafx.event.Event;
+import cn.gaein.java.video.tool.helper.BoxHelper;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelBuffer;
 import javafx.scene.image.PixelFormat;
@@ -11,18 +9,18 @@ import uk.co.caprica.vlcj.player.embedded.videosurface.callback.BufferFormat;
 import uk.co.caprica.vlcj.player.embedded.videosurface.callback.BufferFormatCallback;
 import uk.co.caprica.vlcj.player.embedded.videosurface.callback.format.RV32BufferFormat;
 
-import java.beans.EventHandler;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.function.Consumer;
 
+/**
+ * @author Gaein
+ */
 public class VideoBufferFormatCallback implements BufferFormatCallback {
     private final ImageView view;
-    private final Box<PixelBuffer<ByteBuffer>> bufferBox;
+    private final BoxHelper<PixelBuffer<ByteBuffer>> bufferBox;
     private int sourceWidth;
     private int sourceHeight;
 
-    public VideoBufferFormatCallback(ImageView view, Box<PixelBuffer<ByteBuffer>> bufferBox) {
+    public VideoBufferFormatCallback(ImageView view, BoxHelper<PixelBuffer<ByteBuffer>> bufferBox) {
         this.view = view;
         this.bufferBox = bufferBox;
     }

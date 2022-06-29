@@ -1,7 +1,9 @@
 package cn.gaein.java.video.tool.controllers;
 
 import cn.gaein.java.video.tool.compontents.PlayerView;
+import cn.gaein.java.video.tool.compontents.cell.FragmentCell;
 import cn.gaein.java.video.tool.compontents.cell.VideoCell;
+import cn.gaein.java.video.tool.helper.DialogHelper;
 import cn.gaein.java.video.tool.models.Video;
 import cn.gaein.java.video.tool.models.VideoFragment;
 import cn.gaein.java.video.tool.utils.FileExtensions;
@@ -10,6 +12,7 @@ import io.github.palexdev.materialfx.controls.MFXListView;
 import io.github.palexdev.materialfx.utils.others.FunctionalStringConverter;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -21,8 +24,9 @@ import java.util.ResourceBundle;
  */
 public class MainController implements Initializable {
     @FXML
+    private StackPane mainPane;
+    @FXML
     private PlayerView playerView;
-
     @FXML
     private MFXListView<Video> inputFileList;
     @FXML
@@ -34,7 +38,7 @@ public class MainController implements Initializable {
     @FXML
     private MFXButton flagCancelBtn;
     @FXML
-    private MFXListView outputFileList;
+    private MFXListView<VideoFragment> outputFileList;
     @FXML
     private MFXButton exportOutputBtn;
     @FXML
@@ -46,15 +50,31 @@ public class MainController implements Initializable {
     @FXML
     private MFXButton outputMoveDownBtn;
 
-    public MainController() {
+    private final Stage stage;
+    private DialogHelper dialogHelper;
+
+    public MainController(Stage stage) {
+        this.stage = stage;
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        listInit();
+        dialogInit();
+    }
+
+    private void listInit() {
         // input file list
-        var converter = FunctionalStringConverter.to(Video::getDisplayName);
-        inputFileList.setConverter(converter);
+        inputFileList.setConverter(FunctionalStringConverter.to(Video::getDisplayName));
         inputFileList.setCellFactory(v -> new VideoCell(inputFileList, v));
+
+        // output file list
+        outputFileList.setConverter(FunctionalStringConverter.to(VideoFragment::getDisplayName));
+        outputFileList.setCellFactory(f -> new FragmentCell(outputFileList, f));
+    }
+
+    private void dialogInit() {
+        dialogHelper = new DialogHelper(stage);
     }
 
     @FXML
@@ -121,5 +141,25 @@ public class MainController implements Initializable {
 
         var video = selectedList.get(0);
         fragmentInEdit = video.completeFragment(playerView.getTime());
+    }
+
+    @FXML
+    protected void onFlagEditClicked() {
+        if (fragmentInEdit == null) {
+            dialogHelper.getErrorDialog("没有片段", config ->
+                    config.setOwnerNode(mainPane)).show();
+        }
+
+        // just for test
+        var outputFileListArr = outputFileList.getItems();
+        outputFileListArr.add(fragmentInEdit);
+        fragmentInEdit = null;
+
+        // TODO: change to edit window before add to output list
+    }
+
+    @FXML
+    protected void onFlagCancelClicked() {
+        playerView.getVideo().deprecateFragment();
     }
 }

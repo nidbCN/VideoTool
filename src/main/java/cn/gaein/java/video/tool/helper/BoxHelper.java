@@ -1,13 +1,16 @@
 package cn.gaein.java.video.tool.helper;
 
-public class Box<T> {
+/**
+ * @author Gaein
+ */
+public class BoxHelper<T> {
     private T value;
 
-    public Box() {
+    public BoxHelper() {
 
     }
 
-    public Box(T value) {
+    public BoxHelper(T value) {
         this.value = value;
     }
 
