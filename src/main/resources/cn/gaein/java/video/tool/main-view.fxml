@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!--suppress JavaFxRedundantPropertyValue -->
 <?import cn.gaein.java.video.tool.compontents.PlayerView?>
 <?import io.github.palexdev.materialfx.controls.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.*?>
 <?import org.kordamp.ikonli.javafx.*?>
-<!--suppress JavaFxRedundantPropertyValue -->
 <StackPane xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
            fx:id="mainPane"
@@ -15,18 +15,18 @@
             <Insets top="16" right="16" bottom="16" left="16"/>
         </padding>
         <VBox spacing="16">
-            <MFXListView fx:id="inputFileList" prefHeight="486"/>
+            <MFXListView fx:id="inputFileList" prefWidth="200" prefHeight="486"/>
             <HBox spacing="8">
                 <MFXButton fx:id="inputAddBtn" buttonType="RAISED" styleClass="primary, source-font"
                            prefWidth="96" prefHeight="32" text="添加视频"
-                           onMouseClicked="#onAddInputClick">
+                           onMouseClicked="#onAddInputClicked">
                     <graphic>
                         <FontIcon iconColor="white" iconLiteral="mdi2p-plus"/>
                     </graphic>
                 </MFXButton>
                 <MFXButton fx:id="inputRemoveBtn" buttonType="RAISED" styleClass="primary, source-font"
                            prefWidth="96" prefHeight="32" text="移除视频"
-                           onMouseClicked="#onRemoveInputClick">
+                           onMouseClicked="#onRemoveInputClicked">
                     <graphic>
                         <FontIcon iconColor="white" iconLiteral="mdi2m-minus"/>
                     </graphic>
@@ -38,7 +38,7 @@
             <HBox spacing="16">
                 <MFXButton fx:id="flagStartBtn" buttonType="RAISED" styleClass="primary, source-font"
                            prefWidth="96" prefHeight="32" text="片段开始"
-                           onMouseClicked="#onFlagStartClick">
+                           onMouseClicked="#onFlagStartClicked">
                     <graphic>
                         <FontIcon iconColor="white" iconLiteral="mdi2f-flag-plus"/>
                     </graphic>
@@ -67,7 +67,7 @@
             </HBox>
         </VBox>
         <VBox spacing="16">
-            <MFXListView fx:id="outputFileList" prefHeight="486"/>
+            <MFXListView fx:id="outputFileList" prefWidth="240" prefHeight="486"/>
             <HBox spacing="24">
                 <MFXButton fx:id="exportOutputBtn" buttonType="RAISED" styleClass="primary, source-font"
                            prefWidth="96" prefHeight="32" text="导出序列">
@@ -77,17 +77,27 @@
                 </MFXButton>
                 <HBox spacing="4">
                     <MFXButton fx:id="outputMoveUpBtn" buttonType="RAISED"
-                               prefWidth="32" prefHeight="32" text="">
+                               prefWidth="32" prefHeight="32" text=""
+                               onMouseClicked="#onMoveUpOutputClicked">
                         <graphic>
                             <FontIcon iconColor="#7a0ed9" iconSize="20"
                                       iconLiteral="mdi2a-arrow-up-drop-circle-outline"/>
                         </graphic>
                     </MFXButton>
                     <MFXButton fx:id="outputMoveDownBtn" buttonType="RAISED"
-                               prefWidth="32" prefHeight="32" text="">
+                               prefWidth="32" prefHeight="32" text=""
+                               onMouseClicked="#onMoveDownOutputClicked">
                         <graphic>
                             <FontIcon iconColor="#7a0ed9" iconSize="20"
                                       iconLiteral="mdi2a-arrow-down-drop-circle-outline"/>
+                        </graphic>
+                    </MFXButton>
+                    <MFXButton fx:id="outputDeleteBtn" buttonType="RAISED"
+                               prefWidth="32" prefHeight="32" text=""
+                               onMouseClicked="#onRemoveOutputClicked">
+                        <graphic>
+                            <FontIcon iconColor="#7a0ed9" iconSize="20"
+                                      iconLiteral="mdi2m-minus"/>
                         </graphic>
                     </MFXButton>
                 </HBox>

@@ -27,7 +27,7 @@ public class MainApplication extends Application {
 
         loader.setControllerFactory(c -> new MainController(stage));
 
-        var scene = new Scene(loader.load(), 1280, 600);
+        var scene = new Scene(loader.load(), 1280, 560);
         scene.getStylesheets().addAll(
                 Objects.requireNonNull(getClass().getResource("styles/Global.css")).toExternalForm(),
                 Objects.requireNonNull(getClass().getResource("styles/Button.css")).toExternalForm(),

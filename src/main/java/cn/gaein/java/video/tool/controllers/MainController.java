@@ -17,12 +17,15 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.net.URL;
+import java.util.Collections;
 import java.util.ResourceBundle;
 
 /**
  * @author Gaein
  */
 public class MainController implements Initializable {
+    @FXML
+    private MFXButton outputDeleteBtn;
     @FXML
     private StackPane mainPane;
     @FXML
@@ -78,11 +81,10 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    protected void onAddInputClick() {
-        var inputFileListArr = inputFileList.getItems();
+    protected void onAddInputClicked() {
+        var videoList = inputFileList.getItems();
 
         var chooser = new FileChooser();
-
         chooser.setTitle("导入视频文件");
         chooser.getExtensionFilters().addAll(FileExtensions.getVideoExtensions());
 
@@ -93,9 +95,9 @@ public class MainController implements Initializable {
 
         fileList.forEach(f -> {
             var video = new Video(f);
-            var index = inputFileListArr.size();
+            var index = videoList.size();
 
-            inputFileListArr.add(index, video);
+            videoList.add(index, video);
 
             var item = inputFileList.getCell(index);
             item.setOnMouseClicked(e -> {
@@ -107,17 +109,17 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    protected void onRemoveInputClick() {
-        var inputFileListArr = inputFileList.getItems();
-        var selectFileListArr = inputFileList.getSelectionModel().getSelectedValues();
+    protected void onRemoveInputClicked() {
+        var videoList = inputFileList.getItems();
+        var selectedList = inputFileList.getSelectionModel().getSelectedValues();
 
         // no video selected
-        if (selectFileListArr.size() < 1) {
+        if (selectedList.size() < 1) {
             dialogHelper.getErrorDialog("未选中视频，无法移除").show();
             return;
         }
 
-        inputFileListArr.removeAll(selectFileListArr);
+        videoList.removeAll(selectedList);
 
         // Only select one, must be the video witch are playing
         playerView.stop();
@@ -126,7 +128,7 @@ public class MainController implements Initializable {
     private VideoFragment fragmentInEdit;
 
     @FXML
-    protected void onFlagStartClick() {
+    protected void onFlagStartClicked() {
         var video = playerView.getVideo();
         if (video == null) {
             dialogHelper.getErrorDialog("未选中视频，无法开始片段").show();
@@ -158,6 +160,7 @@ public class MainController implements Initializable {
         if (fragmentInEdit == null) {
             dialogHelper.getErrorDialog("当前视频没有片段，无法编辑片段", config ->
                     config.setOwnerNode(mainPane)).show();
+            return;
         }
 
         // just for test
@@ -176,5 +179,63 @@ public class MainController implements Initializable {
             return;
         }
         video.deprecateFragment();
+    }
+
+    @FXML
+    protected void onRemoveOutputClicked() {
+        var fragmentList = outputFileList.getItems();
+        var selection = outputFileList.getSelectionModel();
+
+        if (fragmentList.size() < 1) {
+            return;
+        }
+
+        fragmentList.removeAll(selection.getSelectedValues());
+    }
+
+    @FXML
+    protected void onMoveUpOutputClicked() {
+        var fragmentList = outputFileList.getItems();
+        var selection = outputFileList.getSelectionModel();
+
+        // only one item, no need to move
+        if (fragmentList.size() <= 1) {
+            return;
+        }
+
+        var fragment = selection.getSelectedValues().get(0);
+        var index = fragmentList.indexOf(fragment);
+
+        if (index == 0) {
+
+            return;
+        }
+
+        Collections.swap(fragmentList, index, index - 1);
+        selection.deselectIndex(index);
+        selection.selectIndex(index - 1);
+    }
+
+    @FXML
+    protected void onMoveDownOutputClicked() {
+        var fragmentList = outputFileList.getItems();
+        var selection = outputFileList.getSelectionModel();
+
+        // only one item, no need to move
+        if (fragmentList.size() <= 1) {
+            return;
+        }
+
+        var fragment = selection.getSelectedValues().get(0);
+        var index = fragmentList.indexOf(fragment);
+
+        // this item is already at last
+        if (index == fragmentList.size()) {
+            return;
+        }
+
+        Collections.swap(fragmentList, index, index + 1);
+        selection.deselectIndex(index);
+        selection.selectIndex(index + 1);
     }
 }
