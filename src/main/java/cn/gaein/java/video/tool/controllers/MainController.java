@@ -111,6 +111,12 @@ public class MainController implements Initializable {
         var inputFileListArr = inputFileList.getItems();
         var selectFileListArr = inputFileList.getSelectionModel().getSelectedValues();
 
+        // no video selected
+        if (selectFileListArr.size() < 1) {
+            dialogHelper.getErrorDialog("未选中视频，无法移除").show();
+            return;
+        }
+
         inputFileListArr.removeAll(selectFileListArr);
 
         // Only select one, must be the video witch are playing
@@ -121,32 +127,36 @@ public class MainController implements Initializable {
 
     @FXML
     protected void onFlagStartClick() {
-        var selectedList = inputFileList.getSelectionModel().getSelectedValues();
-        if (selectedList.size() < 1) {
-            // no item selected
+        var video = playerView.getVideo();
+        if (video == null) {
+            dialogHelper.getErrorDialog("未选中视频，无法开始片段").show();
             return;
         }
 
-        var video = selectedList.get(0);
         video.startFragment(playerView.getTime());
     }
 
     @FXML
     protected void onFlagCompleteClicked() {
-        var selectedList = inputFileList.getSelectionModel().getSelectedValues();
-        if (selectedList.size() < 1) {
-            // no item selected
+        var video = playerView.getVideo();
+        if (video == null) {
+            dialogHelper.getErrorDialog("未选中视频，无法完成片段").show();
             return;
         }
 
-        var video = selectedList.get(0);
         fragmentInEdit = video.completeFragment(playerView.getTime());
     }
 
     @FXML
     protected void onFlagEditClicked() {
+        var video = playerView.getVideo();
+        if (video == null) {
+            dialogHelper.getErrorDialog("未选中视频，无法编辑片段").show();
+            return;
+        }
+
         if (fragmentInEdit == null) {
-            dialogHelper.getErrorDialog("没有片段", config ->
+            dialogHelper.getErrorDialog("当前视频没有片段，无法编辑片段", config ->
                     config.setOwnerNode(mainPane)).show();
         }
 
@@ -160,6 +170,11 @@ public class MainController implements Initializable {
 
     @FXML
     protected void onFlagCancelClicked() {
-        playerView.getVideo().deprecateFragment();
+        var video = playerView.getVideo();
+        if (video == null) {
+            dialogHelper.getErrorDialog("未选中视频，无法取消片段").show();
+            return;
+        }
+        video.deprecateFragment();
     }
 }

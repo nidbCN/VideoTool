@@ -52,6 +52,11 @@ public class DialogHelper {
         return dialog;
     }
 
+    public MFXStageDialog getErrorDialog(String content) {
+        return getErrorDialog(content, config -> {
+        });
+    }
+
     public MFXStageDialog getErrorDialog(String content, Consumer<MFXStageDialogBuilder> config) {
         return getDialog(content, contentBuilder -> contentBuilder
                         .setHeaderText("错误")
