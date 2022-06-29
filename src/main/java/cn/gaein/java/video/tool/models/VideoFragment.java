@@ -1,6 +1,6 @@
 package cn.gaein.java.video.tool.models;
 
-import net.bramp.ffmpeg.builder.FFmpegBuilder;
+import cn.gaein.java.video.tool.ffmpeg.ExtFfmpegBuilder;
 
 import java.util.function.Consumer;
 
@@ -9,7 +9,7 @@ import java.util.function.Consumer;
  */
 public class VideoFragment {
     private final Video video;
-    private final FFmpegBuilder builder = new FFmpegBuilder();
+    private final ExtFfmpegBuilder builder = new ExtFfmpegBuilder();
     private final int fragmentId;
     private VideoTime startTime;
     private VideoTime endTime;
@@ -27,6 +27,9 @@ public class VideoFragment {
         this.fragmentId = fragmentId;
         this.startTime = startTime;
         this.endTime = endTime;
+        builder
+                .setInput(video.getFile().getPath())
+                .overrideOutputFiles(true);
     }
 
     public Video getVideo() {
@@ -49,7 +52,7 @@ public class VideoFragment {
         this.endTime = endTime;
     }
 
-    public void edit(Consumer<? super FFmpegBuilder> action) {
+    public void edit(Consumer<? super ExtFfmpegBuilder> action) {
         action.accept(builder);
     }
 

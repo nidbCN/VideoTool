@@ -8,12 +8,14 @@ module cn.gaein.video.videotool {
     requires ffmpeg;
     requires uk.co.caprica.vlcj;
     requires uk.co.caprica.vlcj.javafx;
+    requires com.google.common;
 
     exports cn.gaein.java.video.tool;
     exports cn.gaein.java.video.tool.compontents;
     exports cn.gaein.java.video.tool.compontents.cell;
     exports cn.gaein.java.video.tool.controllers;
     exports cn.gaein.java.video.tool.models;
+    exports cn.gaein.java.video.tool.ffmpeg;
 
     opens cn.gaein.java.video.tool to javafx.fxml;
     opens cn.gaein.java.video.tool.controllers to javafx.fxml;

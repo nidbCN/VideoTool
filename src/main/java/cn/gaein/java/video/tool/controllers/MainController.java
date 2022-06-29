@@ -88,7 +88,7 @@ public class MainController implements Initializable {
         chooser.setTitle("导入视频文件");
         chooser.getExtensionFilters().addAll(FileExtensions.getVideoExtensions());
 
-        var fileList = chooser.showOpenMultipleDialog(new Stage());
+        var fileList = chooser.showOpenMultipleDialog(stage);
         if (fileList == null) {
             return;
         }
@@ -237,5 +237,26 @@ public class MainController implements Initializable {
         Collections.swap(fragmentList, index, index + 1);
         selection.deselectIndex(index);
         selection.selectIndex(index + 1);
+    }
+
+    protected void onExportOutputClicked() {
+        var fragmentList = outputFileList.getItems();
+
+        if (fragmentList.size() == 0) {
+            // no file to export
+            return;
+        }
+
+        var chooser = new FileChooser();
+        chooser.setTitle("导出序列为");
+        chooser.getExtensionFilters().addAll(FileExtensions.getVideoExtensions());
+        var file = chooser.showSaveDialog(stage);
+
+        if (fragmentList.size() == 1) {
+            var fragment = fragmentList.get(0);
+            fragment.edit(fFmpegBuilder -> {
+
+            });
+        }
     }
 }
