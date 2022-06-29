@@ -27,6 +27,8 @@ public class DialogHelper {
     public MFXStageDialog getDialog(String content, Consumer<MFXGenericDialogBuilder> contentConfig, Consumer<MFXStageDialogBuilder> config) {
         var contentBuilder = MFXGenericDialogBuilder.build()
                 .setContentText(content)
+                .setShowMinimize(false)
+                .setShowAlwaysOnTop(false)
                 .makeScrollable(false);
 
         contentConfig.accept(contentBuilder);
