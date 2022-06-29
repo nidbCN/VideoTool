@@ -55,6 +55,11 @@ public class VideoFragment {
 
     public String getDisplayName() {
         var videoName = video.getDisplayName();
+        return videoName + "-" + fragmentId;
+    }
+
+    public String getFullDisplayName() {
+        var videoName = video.getDisplayName();
         var nullStr = "??:??:??.???";
 
         var timeStr = (startTime == null ? nullStr : startTime) +
@@ -65,6 +70,6 @@ public class VideoFragment {
 
     @Override
     public String toString() {
-        return getDisplayName();
+        return getFullDisplayName();
     }
 }

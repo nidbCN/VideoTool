@@ -1,5 +1,7 @@
 package cn.gaein.java.video.tool.models;
 
+import javafx.scene.text.Text;
+
 import java.io.File;
 import java.util.ArrayList;
 
@@ -28,13 +30,14 @@ public class Video {
     }
 
     public String getDisplayName() {
+        // TODO: calculate text display width
+
         var length = 15;
 
         var fullName = file.getName();
         var extIndex = fullName.lastIndexOf('.');
         var pureName = fullName.substring(0, extIndex);
         var extName = fullName.substring(extIndex);
-
         var builder = new StringBuilder(fullName.length());
 
         if (pureName.length() <= length) {

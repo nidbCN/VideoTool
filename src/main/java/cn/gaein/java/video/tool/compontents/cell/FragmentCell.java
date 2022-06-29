@@ -1,8 +1,8 @@
 package cn.gaein.java.video.tool.compontents.cell;
 
-import cn.gaein.java.video.tool.models.Video;
 import cn.gaein.java.video.tool.models.VideoFragment;
 import io.github.palexdev.materialfx.controls.MFXListView;
+import io.github.palexdev.materialfx.controls.MFXTooltip;
 import io.github.palexdev.materialfx.controls.cell.MFXListCell;
 import org.kordamp.ikonli.javafx.FontIcon;
 
@@ -16,6 +16,8 @@ public class FragmentCell extends MFXListCell<VideoFragment> {
     public FragmentCell(MFXListView<VideoFragment> listView, VideoFragment fragment) {
         super(listView, fragment);
 
+        MFXTooltip.of(this,
+                fragment.getFullDisplayName()).install();
         render(fragment);
     }
 
@@ -25,7 +27,7 @@ public class FragmentCell extends MFXListCell<VideoFragment> {
 
         // first render is null
         if (fragmentIcon != null) {
-            getChildren().add(fragmentIcon);
+            getChildren().add(0, fragmentIcon);
         }
     }
 }
