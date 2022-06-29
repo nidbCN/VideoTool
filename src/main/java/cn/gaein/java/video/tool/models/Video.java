@@ -1,7 +1,5 @@
 package cn.gaein.java.video.tool.models;
 
-import javafx.scene.text.Text;
-
 import java.io.File;
 import java.util.ArrayList;
 
