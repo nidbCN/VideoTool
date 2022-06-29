@@ -53,12 +53,18 @@ public class VideoFragment {
         action.accept(builder);
     }
 
-    @Override
-    public String toString() {
+    public String getDisplayName() {
+        var videoName = video.getDisplayName();
         var nullStr = "??:??:??.???";
 
-        return (startTime == null ? nullStr : startTime) +
+        var timeStr = (startTime == null ? nullStr : startTime) +
                 "-" +
                 (endTime == null ? nullStr : endTime);
+        return videoName + "_" + timeStr;
+    }
+
+    @Override
+    public String toString() {
+        return getDisplayName();
     }
 }

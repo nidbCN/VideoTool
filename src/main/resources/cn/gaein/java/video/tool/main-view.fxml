@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import cn.gaein.java.video.tool.compontents.PlayerView?>
 <?import io.github.palexdev.materialfx.controls.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.*?>
 <?import org.kordamp.ikonli.javafx.*?>
-<?import cn.gaein.java.video.tool.compontents.PlayerView?>
+<!--suppress JavaFxRedundantPropertyValue -->
 <StackPane xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
+           fx:id="mainPane"
            fx:controller="cn.gaein.java.video.tool.controllers.MainController">
     <HBox spacing="16">
         <padding>
@@ -49,13 +51,15 @@
                     </graphic>
                 </MFXButton>
                 <MFXButton fx:id="flagEditBtn" buttonType="RAISED" styleClass="primary, source-font"
-                           prefWidth="96" prefHeight="32" text="编辑片段">
+                           prefWidth="96" prefHeight="32" text="编辑片段"
+                           onMouseClicked="#onFlagEditClicked">
                     <graphic>
                         <FontIcon iconLiteral="mdi2f-flag-checkered" iconColor="white"/>
                     </graphic>
                 </MFXButton>
                 <MFXButton fx:id="flagCancelBtn" buttonType="RAISED" styleClass="primary, source-font"
-                           prefWidth="96" prefHeight="32" text="取消片段">
+                           prefWidth="96" prefHeight="32" text="取消片段"
+                           onMouseClicked="#onFlagCancelClicked">
                     <graphic>
                         <FontIcon iconLiteral="mdi2f-flag-remove" iconColor="white"/>
                     </graphic>

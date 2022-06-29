@@ -1,5 +1,6 @@
 package cn.gaein.java.video.tool;
 
+import cn.gaein.java.video.tool.controllers.MainController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -16,6 +17,8 @@ public class MainApplication extends Application {
     public void start(Stage stage) throws IOException {
         var loader = new FXMLLoader(
                 MainApplication.class.getResource("main-view.fxml"));
+
+        loader.setControllerFactory(c -> new MainController(stage));
 
         var scene = new Scene(loader.load(), 1280, 600);
         scene.getStylesheets().addAll(
