@@ -9,6 +9,7 @@ module cn.gaein.video.videotool {
     requires uk.co.caprica.vlcj;
     requires uk.co.caprica.vlcj.javafx;
     requires com.google.common;
+    requires com.google.gson;
 
     exports cn.gaein.java.video.tool;
     exports cn.gaein.java.video.tool.compontents;
