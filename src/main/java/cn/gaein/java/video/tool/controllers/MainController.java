@@ -10,6 +10,7 @@ import cn.gaein.java.video.tool.utils.FileExtensions;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXListView;
 import io.github.palexdev.materialfx.utils.others.FunctionalStringConverter;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.StackPane;
@@ -23,7 +24,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.ResourceBundle;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  * @author Gaein
@@ -61,6 +62,8 @@ public class MainController implements Initializable {
     private final Stage stage;
     private DialogHelper dialogHelper;
     private FFmpegExecutor executor;
+    private final ExecutorService executorService
+            = new ThreadPoolExecutor(4,8,0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>());
 
     public MainController(Stage stage) {
         this.stage = stage;
@@ -72,10 +75,9 @@ public class MainController implements Initializable {
         dialogInit();
 
         try {
-            var ffmpeg = new FFmpeg("D:\\Softwares\\scoop\\apps\\ffmpeg\\current\\bin\\ffmpeg.exe");
-            var ffprobe = new FFprobe("D:\\Softwares\\scoop\\apps\\ffmpeg\\current\\bin\\ffprobe.exe");
-            executor = new FFmpegExecutor(ffmpeg, ffprobe);
+            executor = new FFmpegExecutor(new FFmpeg("ffmpeg.exe"), new FFprobe("ffprobe.exe"));
         } catch (IOException e) {
+            dialogHelper.getErrorDialog("未找到依赖程序：ffmpeg，请安装ffmpeg并添加环境变量\nhttps://ffmpeg.org/");
             throw new RuntimeException(e);
         }
     }
@@ -267,6 +269,7 @@ public class MainController implements Initializable {
         chooser.getExtensionFilters().addAll(FileExtensions.getVideoExtensions());
         var file = chooser.showSaveDialog(stage);
 
+        playerView.pause();
         if (fragmentList.size() == 1) {
             var fragment = fragmentList.get(0);
             fragment.edit(builder -> builder
@@ -275,7 +278,23 @@ public class MainController implements Initializable {
                     .addOutput(file.getPath())
                     .done());
 
-            executor.createJob(fragment.getBuilder()).run();
+            var task = new Task<Void>() {
+                @Override
+                protected Void call() {
+                    executor.createJob(fragment.getBuilder()).run();
+                    return null;
+                }
+            };
+            executorService.submit(task);
+
+        } else {
+            for (var fragment : fragmentList) {
+                // TODO queue export
+            }
         }
+
+        stage.getScene().getWindow().setOnCloseRequest(e -> {
+
+        });
     }
 }
