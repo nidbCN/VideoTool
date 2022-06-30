@@ -66,6 +66,7 @@ public class PlayerView extends VBox {
 
         initPlayer();
 
+
         position = new PositionProperty(player);
 
         // init view
@@ -140,6 +141,8 @@ public class PlayerView extends VBox {
         player.videoSurface().set(
                 PixelBufferVideoSurface.pixelBufferVideoSurfaceForImageView(displayView)
         );
+
+        resetDisplayView();
     }
 
     private void initButtons() {
