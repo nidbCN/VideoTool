@@ -56,6 +56,10 @@ public class VideoFragment {
         action.accept(builder);
     }
 
+    public ExtFfmpegBuilder getBuilder() {
+        return builder;
+    }
+
     public String getDisplayName() {
         var videoName = video.getDisplayName();
         return videoName + "-" + fragmentId;
