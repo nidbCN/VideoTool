@@ -24,6 +24,10 @@ public class VideoTime {
         this.minute = minute;
         this.second = second;
         this.millSec = millSec;
+        this.time = (long) hour * 60 * 60 * 1000
+                + (long) minute * 60 * 1000
+                + second * 1000L
+                + millSec;
     }
 
     public String toLongString() {
@@ -46,6 +50,7 @@ public class VideoTime {
         if (time < 0) {
             throw new IllegalArgumentException("time cannot be less than zero");
         }
+        this.time = time;
 
         millSec = (int) (time % 1000);
         var tempSec = (int) (time / 1000);
