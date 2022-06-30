@@ -1,7 +1,6 @@
 package cn.gaein.java.video.tool.ffmpeg;
 
 import cn.gaein.java.video.tool.ffmpeg.models.ExtFfmpegOption;
-import com.google.common.collect.ImmutableList;
 import net.bramp.ffmpeg.FFmpegUtils;
 import net.bramp.ffmpeg.builder.FFmpegBuilder;
 
@@ -34,18 +33,19 @@ public class ExtFfmpegBuilder extends FFmpegBuilder {
     @Override
     public List<String> build() {
         var result = super.build();
-        var args = new ImmutableList.Builder<String>();
+        var list = new ArrayList<>(result);
 
         // add stop time
         if (stopTime != null) {
-            args.add("-to", FFmpegUtils.toTimecode(stopTime, TimeUnit.MILLISECONDS));
+            list.add("-to");
+            list.add(FFmpegUtils.toTimecode(stopTime, TimeUnit.MILLISECONDS));
         }
 
         // add options
         for (var option : options) {
-            args.addAll(option.get());
+            list.addAll(option.getOption());
         }
 
-        return result;
+        return list;
     }
 }

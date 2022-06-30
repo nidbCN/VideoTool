@@ -1,6 +1,5 @@
 package cn.gaein.java.video.tool.ffmpeg.models;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -19,10 +18,19 @@ public class ExtFfmpegOption {
         this.value = value;
     }
 
-    public Collection<String> get() {
-        if (value == null) {
-            return List.of(command);
+    public String getCommand() {
+        return command;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public List<String> getOption() {
+        if (value != null) {
+            return List.of(command, value);
         }
-        return List.of(command, value);
+
+        return List.of(command);
     }
 }
