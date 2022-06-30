@@ -70,7 +70,9 @@
             <MFXListView fx:id="outputFileList" prefWidth="240" prefHeight="486"/>
             <HBox spacing="24">
                 <MFXButton fx:id="exportOutputBtn" buttonType="RAISED" styleClass="primary, source-font"
-                           prefWidth="96" prefHeight="32" text="导出序列">
+                           prefWidth="96" prefHeight="32" text="导出序列"
+                           onMouseClicked="#onExportOutputClicked"
+                >
                     <graphic>
                         <FontIcon iconLiteral="mdi2f-file-export" iconColor="white"/>
                     </graphic>
