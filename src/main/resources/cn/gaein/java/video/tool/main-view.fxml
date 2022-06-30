@@ -15,7 +15,7 @@
             <Insets top="16" right="16" bottom="16" left="16"/>
         </padding>
         <VBox spacing="16">
-            <MFXListView fx:id="inputFileList" prefWidth="200" prefHeight="486"/>
+            <MFXListView fx:id="inputFileList" prefWidth="200" prefHeight="490"/>
             <HBox spacing="8">
                 <MFXButton fx:id="inputAddBtn" buttonType="RAISED" styleClass="primary, source-font"
                            prefWidth="96" prefHeight="32" text="添加视频"
@@ -67,7 +67,7 @@
             </HBox>
         </VBox>
         <VBox spacing="16">
-            <MFXListView fx:id="outputFileList" prefWidth="240" prefHeight="486"/>
+            <MFXListView fx:id="outputFileList" prefWidth="240" prefHeight="490"/>
             <HBox spacing="24">
                 <MFXButton fx:id="exportOutputBtn" buttonType="RAISED" styleClass="primary, source-font"
                            prefWidth="96" prefHeight="32" text="导出序列"
