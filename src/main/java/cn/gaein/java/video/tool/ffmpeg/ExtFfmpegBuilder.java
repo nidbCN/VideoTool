@@ -34,16 +34,17 @@ public class ExtFfmpegBuilder extends FFmpegBuilder {
     public List<String> build() {
         var result = super.build();
         var list = new ArrayList<>(result);
+        var index = list.size() - 3;
 
         // add stop time
         if (stopTime != null) {
-            list.add("-to");
-            list.add(FFmpegUtils.toTimecode(stopTime, TimeUnit.MILLISECONDS));
+            list.add(index++, "-to");
+            list.add(index++, FFmpegUtils.toTimecode(stopTime, TimeUnit.MILLISECONDS));
         }
 
         // add options
         for (var option : options) {
-            list.addAll(option.getOption());
+            list.addAll(index++, option.getOption());
         }
 
         return list;

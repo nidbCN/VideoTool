@@ -15,10 +15,15 @@ import javafx.fxml.Initializable;
 import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import net.bramp.ffmpeg.FFmpeg;
+import net.bramp.ffmpeg.FFmpegExecutor;
+import net.bramp.ffmpeg.FFprobe;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.ResourceBundle;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Gaein
@@ -55,6 +60,7 @@ public class MainController implements Initializable {
 
     private final Stage stage;
     private DialogHelper dialogHelper;
+    private FFmpegExecutor executor;
 
     public MainController(Stage stage) {
         this.stage = stage;
@@ -64,6 +70,14 @@ public class MainController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         listInit();
         dialogInit();
+
+        try {
+            var ffmpeg = new FFmpeg("D:\\Softwares\\scoop\\apps\\ffmpeg\\current\\bin\\ffmpeg.exe");
+            var ffprobe = new FFprobe("D:\\Softwares\\scoop\\apps\\ffmpeg\\current\\bin\\ffprobe.exe");
+            executor = new FFmpegExecutor(ffmpeg, ffprobe);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void listInit() {
@@ -239,6 +253,7 @@ public class MainController implements Initializable {
         selection.selectIndex(index + 1);
     }
 
+    @FXML
     protected void onExportOutputClicked() {
         var fragmentList = outputFileList.getItems();
 
@@ -254,9 +269,13 @@ public class MainController implements Initializable {
 
         if (fragmentList.size() == 1) {
             var fragment = fragmentList.get(0);
-            fragment.edit(fFmpegBuilder -> {
+            fragment.edit(builder -> builder
+                    .setStopTime(fragment.getEndTime().getTime(), TimeUnit.MILLISECONDS)
+                    .setStartOffset(fragment.getStartTime().getTime(), TimeUnit.MILLISECONDS)
+                    .addOutput(file.getPath())
+                    .done());
 
-            });
+            executor.createJob(fragment.getBuilder()).run();
         }
     }
 }
