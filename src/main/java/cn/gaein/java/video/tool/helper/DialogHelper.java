@@ -19,6 +19,8 @@ public class DialogHelper {
     private final Stage stage;
     private final MFXFontIcon errorIcon
             = new MFXFontIcon("mfx-exclamation-circle-filled", 16);
+    private final MFXFontIcon infoIcon
+            = new MFXFontIcon("mfx-info-circle-filled", 16);
 
     public DialogHelper(Stage stage) {
         this.stage = stage;
@@ -62,6 +64,19 @@ public class DialogHelper {
                         .setHeaderText("错误")
                         .setHeaderIcon(errorIcon)
                         .addStyleClasses("mfx-error-dialog"),
+                config);
+    }
+
+    public MFXStageDialog getInfoDialog(String content) {
+        return getInfoDialog(content, config -> {
+        });
+    }
+
+    public MFXStageDialog getInfoDialog(String content, Consumer<MFXStageDialogBuilder> config) {
+        return getDialog(content, contentBuilder -> contentBuilder
+                        .setHeaderText("信息")
+                        .setHeaderIcon(infoIcon)
+                        .addStyleClasses("mfx-info-dialog"),
                 config);
     }
 }
