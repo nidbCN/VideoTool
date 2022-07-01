@@ -1,5 +1,6 @@
 package cn.gaein.java.video.tool.helper;
 
+import cn.gaein.java.video.tool.MainApplication;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.dialogs.MFXGenericDialogBuilder;
 import io.github.palexdev.materialfx.dialogs.MFXStageDialog;
@@ -10,6 +11,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
@@ -31,7 +33,9 @@ public class DialogHelper {
                 .setContentText(content)
                 .setShowMinimize(false)
                 .setShowAlwaysOnTop(false)
-                .makeScrollable(false);
+                .addStylesheets(Objects.requireNonNull(MainApplication.class.getResource("styles/Fonts.css")).toExternalForm())
+                .addStylesheets(Objects.requireNonNull(MainApplication.class.getResource("styles/Global.css")).toExternalForm())
+                .addStyleClasses("source-font");
 
         contentConfig.accept(contentBuilder);
         var dialogContent = contentBuilder.get();
@@ -45,12 +49,16 @@ public class DialogHelper {
         config.accept(builder);
 
         var dialog = builder.get();
+        dialog.setMaxWidth(600);
+        dialog.setMaxHeight(400);
+
         var confirmBtn = new MFXButton("确定");
         confirmBtn.setButtonType(ButtonType.RAISED);
         confirmBtn.setStyle("-fx-background-color: -mfx-green; -fx-text-fill: white;");
         dialogContent.addActions(Map.entry(
                 confirmBtn, event -> dialog.close()
         ));
+
         return dialog;
     }
 
@@ -76,7 +84,8 @@ public class DialogHelper {
         return getDialog(content, contentBuilder -> contentBuilder
                         .setHeaderText("信息")
                         .setHeaderIcon(infoIcon)
-                        .addStyleClasses("mfx-info-dialog"),
+                        .addStyleClasses("mfx-info-dialog")
+                        .addStyleClasses("source-font"),
                 config);
     }
 }
