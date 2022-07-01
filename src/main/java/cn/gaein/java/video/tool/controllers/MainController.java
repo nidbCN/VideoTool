@@ -153,7 +153,10 @@ public class MainController implements Initializable {
     @FXML
     protected void onShowMediaInfoClicked() {
         var info = playerView.getMediaInfo();
-        dialogHelper.getInfoDialog(info).show();
+        var dialog = dialogHelper.getInfoDialog(info);
+        dialog.setWidth(600);
+        dialog.setHeight(400);
+        dialog.show();
     }
     private VideoFragment fragmentInEdit;
 
