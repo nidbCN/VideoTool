@@ -1,11 +1,14 @@
 package cn.gaein.java.video.tool.controllers;
 
+import cn.gaein.java.video.tool.helper.DialogHelper;
+import cn.gaein.java.video.tool.models.FragmentViewModel;
 import cn.gaein.java.video.tool.models.VideoFragment;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.controls.MFXToggleButton;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -31,14 +34,66 @@ public class FragmentController implements Initializable {
     @FXML
     private MFXToggleButton disableAudioBtn;
 
+    private final Stage stage;
     private final VideoFragment fragment;
+    private final DialogHelper dialogHelper;
+    private final FragmentViewModel fragmentModel
+            = new FragmentViewModel();
 
-    public FragmentController(VideoFragment fragment) {
+    public FragmentController(Stage stage, VideoFragment fragment) {
+        this.stage = stage;
         this.fragment = fragment;
+
+        dialogHelper = new DialogHelper(stage);
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        // init bind property
+        disableAudioBtn.selectedProperty().bind(fragmentModel.disableAudioProperty());
+        enableCropBtn.selectedProperty().bind(fragmentModel.enableCropProperty());
+        cropFromText.textProperty().bind(fragmentModel.cropFromProperty());
+        cropToText.textProperty().bind(fragmentModel.cropToProperty());
+        cropHeightText.textProperty().bind(fragmentModel.cropHeightProperty());
+        cropWidthText.textProperty().bind(fragmentModel.cropWidthProperty());
+    }
 
+    @FXML
+    protected void onCancelBtnClicked() {
+        stage.close();
+    }
+
+    @FXML
+    protected void onSaveBtnClicked() {
+        if (fragmentModel.disableAudioProperty().get()) {
+            fragment.edit(builder ->
+                    builder.addOption("-an"));
+        }
+
+        if (fragmentModel.enableCropProperty().get()) {
+            var cropFrom = fragmentModel.cropFromProperty().get();
+            var cropTo = fragmentModel.cropToProperty().get();
+            var cropWidth = fragmentModel.cropWidthProperty().get();
+            var cropHeight = fragmentModel.cropHeightProperty().get();
+
+            try {
+                Integer.parseInt(cropFrom);
+                Integer.parseInt(cropTo);
+                Integer.parseInt(cropWidth);
+                Integer.parseInt(cropHeight);
+            } catch (NumberFormatException e) {
+                dialogHelper.getErrorDialog("格式错误，请输入数字").show();
+                return;
+            }
+
+            fragment.edit(builder ->
+                    builder.addOption("-vf"
+                            , "crop=" + cropWidth
+                                    + ":" + cropHeight
+                                    + ":" + cropFrom
+                                    + ":" + cropTo));
+        }
+
+        stage.close();
     }
 }

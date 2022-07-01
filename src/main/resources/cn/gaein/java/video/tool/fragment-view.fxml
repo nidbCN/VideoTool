@@ -22,8 +22,10 @@
             </HBox>
         </VBox>
         <HBox spacing="16">
-            <MFXButton fx:id="cancelBtn" text="取消"/>
-            <MFXButton fx:id="saveBtn" text="保存"/>
+            <MFXButton fx:id="cancelBtn" text="取消" buttonType="RAISED"
+            onMouseClicked="#onCancelBtnClicked"/>
+            <MFXButton fx:id="saveBtn" text="保存" buttonType="RAISED"
+            onMouseClicked="#onSaveBtnClicked"/>
         </HBox>
     </VBox>
 </StackPane>

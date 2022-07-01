@@ -192,11 +192,12 @@ public class MainController implements Initializable {
 
         playerView.pause();
 
+        var editStage = new Stage();
         var loader = new FXMLLoader(
                 MainApplication.class.getResource("fragment-view.fxml"));
-        loader.setControllerFactory(c -> new FragmentController(fragmentInEdit));
+        loader.setControllerFactory(c -> new FragmentController(editStage, fragmentInEdit));
         var scene = new Scene(loader.load(), 800, 600);
-        var editStage = new Stage();
+
         editStage.setScene(scene);
         editStage.setTitle("编辑片段" + fragmentInEdit.getDisplayName());
         editStage.setResizable(false);
