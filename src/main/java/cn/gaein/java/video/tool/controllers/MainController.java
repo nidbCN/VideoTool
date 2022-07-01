@@ -28,10 +28,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.PosixFilePermission;
 import java.nio.file.attribute.PosixFilePermissions;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -196,7 +193,12 @@ public class MainController implements Initializable {
         var loader = new FXMLLoader(
                 MainApplication.class.getResource("fragment-view.fxml"));
         loader.setControllerFactory(c -> new FragmentController(editStage, fragmentInEdit));
-        var scene = new Scene(loader.load(), 800, 600);
+        var scene = new Scene(loader.load(), 600, 400);
+        scene.getStylesheets().addAll(
+                Objects.requireNonNull(MainApplication.class.getResource("styles/Global.css")).toExternalForm(),
+                Objects.requireNonNull(MainApplication.class.getResource("styles/Button.css")).toExternalForm(),
+                Objects.requireNonNull(MainApplication.class.getResource("styles/Fonts.css")).toExternalForm()
+        );
 
         editStage.setScene(scene);
         editStage.setTitle("编辑片段" + fragmentInEdit.getDisplayName());
@@ -330,8 +332,6 @@ public class MainController implements Initializable {
                         .addOutput(tempPath.getRoot().toString() + fragment.getDisplayName())
                         .done()));
             }
-
-
         }
 
         stage.getScene().getWindow().setOnCloseRequest(e -> {
