@@ -209,8 +209,6 @@ public class MainController implements Initializable {
         var outputFileListArr = outputFileList.getItems();
         outputFileListArr.add(fragmentInEdit);
         fragmentInEdit = null;
-
-        // TODO: change to edit window before add to output list
     }
 
     @FXML
