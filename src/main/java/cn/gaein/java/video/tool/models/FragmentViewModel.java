@@ -18,6 +18,11 @@ public class FragmentViewModel {
             = new SimpleStringProperty("800");
     private final StringProperty cropHeight
             = new SimpleStringProperty("600");
+    private final BooleanProperty enableEncode
+            = new SimpleBooleanProperty();
+
+    private final StringProperty encoder
+            = new SimpleStringProperty("h264");
 
     public BooleanProperty disableAudioProperty() {
         return disableAudio;
@@ -41,5 +46,13 @@ public class FragmentViewModel {
 
     public StringProperty cropHeightProperty() {
         return cropHeight;
+    }
+
+    public BooleanProperty enableEncodeProperty() {
+        return enableEncode;
+    }
+
+    public StringProperty encoderProperty() {
+        return encoder;
     }
 }

@@ -3,6 +3,7 @@
 <!--suppress JavaFxRedundantPropertyValue -->
 <?import io.github.palexdev.materialfx.controls.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.*?>
 <StackPane xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
@@ -21,11 +22,16 @@
                 <MFXTextField fx:id="cropHeightText" floatingText="高度"/>
             </HBox>
         </VBox>
+        <VBox>
+            <MFXToggleButton fx:id="enableEncodeBtn" text="重新编码"/>
+            <Label styleClass="source-font" text="注意：裁剪画面等需要重新编码的会自动启用此项，编码与视频文件格式不兼容可能会出现问题"/>
+            <MFXComboBox fx:id="encoderList" text="Codec"/>
+        </VBox>
         <HBox spacing="16">
-            <MFXButton fx:id="cancelBtn" text="取消" buttonType="RAISED"
-            onMouseClicked="#onCancelBtnClicked"/>
-            <MFXButton fx:id="saveBtn" text="保存" buttonType="RAISED"
-            onMouseClicked="#onSaveBtnClicked"/>
+            <MFXButton fx:id="cancelBtn" text="取消" buttonType="RAISED" styleClass="normal"
+                       onMouseClicked="#onCancelBtnClicked"/>
+            <MFXButton fx:id="saveBtn" text="保存" buttonType="RAISED" styleClass="primary"
+                       onMouseClicked="#onSaveBtnClicked"/>
         </HBox>
     </VBox>
 </StackPane>

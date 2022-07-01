@@ -4,6 +4,7 @@ import cn.gaein.java.video.tool.helper.DialogHelper;
 import cn.gaein.java.video.tool.models.FragmentViewModel;
 import cn.gaein.java.video.tool.models.VideoFragment;
 import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.controls.MFXToggleButton;
 import javafx.fxml.FXML;
@@ -17,6 +18,10 @@ import java.util.ResourceBundle;
  * @author Gaein
  */
 public class FragmentController implements Initializable {
+    @FXML
+    private MFXComboBox<String> encoderList;
+    @FXML
+    private MFXToggleButton enableEncodeBtn;
     @FXML
     private MFXButton cancelBtn;
     @FXML
@@ -49,6 +54,10 @@ public class FragmentController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        encoderList.getItems().addAll(
+                "dvvideo", "flv", "gif", "h264", "hevc"
+        );
+
         // init bind property
         fragmentModel.disableAudioProperty().bind(disableAudioBtn.selectedProperty());
         fragmentModel.enableCropProperty().bind(enableCropBtn.selectedProperty());
@@ -56,6 +65,14 @@ public class FragmentController implements Initializable {
         fragmentModel.cropToProperty().bind(cropToText.textProperty());
         fragmentModel.cropWidthProperty().bind(cropWidthText.textProperty());
         fragmentModel.cropHeightProperty().bind(cropHeightText.textProperty());
+        fragmentModel.enableEncodeProperty().bind(enableEncodeBtn.selectedProperty());
+        fragmentModel.encoderProperty().bind(encoderList.valueProperty());
+
+        cropFromText.disableProperty().bind(enableCropBtn.selectedProperty().not());
+        cropToText.disableProperty().bind(enableCropBtn.selectedProperty().not());
+        cropWidthText.disableProperty().bind(enableCropBtn.selectedProperty().not());
+        cropHeightText.disableProperty().bind(enableCropBtn.selectedProperty().not());
+        encoderList.disableProperty().bind(enableEncodeBtn.selectedProperty().not());
     }
 
     @FXML
@@ -87,11 +104,17 @@ public class FragmentController implements Initializable {
             }
 
             fragment.edit(builder ->
-                    builder.addOption("-vf"
-                            , "crop=" + cropWidth
-                                    + ":" + cropHeight
-                                    + ":" + cropFrom
-                                    + ":" + cropTo));
+                    builder.setVideoFilter("crop=" + cropWidth
+                            + ":" + cropHeight
+                            + ":" + cropFrom
+                            + ":" + cropTo)
+            );
+        }
+
+
+        if (fragmentModel.enableEncodeProperty().get()) {
+            fragment.edit(builder ->
+                    builder.addOption("-vcodec", fragmentModel.encoderProperty().get()));
         }
 
         stage.close();
