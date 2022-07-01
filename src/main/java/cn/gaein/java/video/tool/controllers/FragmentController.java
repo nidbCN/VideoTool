@@ -50,12 +50,12 @@ public class FragmentController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // init bind property
-        disableAudioBtn.selectedProperty().bind(fragmentModel.disableAudioProperty());
-        enableCropBtn.selectedProperty().bind(fragmentModel.enableCropProperty());
-        cropFromText.textProperty().bind(fragmentModel.cropFromProperty());
-        cropToText.textProperty().bind(fragmentModel.cropToProperty());
-        cropHeightText.textProperty().bind(fragmentModel.cropHeightProperty());
-        cropWidthText.textProperty().bind(fragmentModel.cropWidthProperty());
+        fragmentModel.disableAudioProperty().bind(disableAudioBtn.selectedProperty());
+        fragmentModel.enableCropProperty().bind(enableCropBtn.selectedProperty());
+        fragmentModel.cropFromProperty().bind(cropFromText.textProperty());
+        fragmentModel.cropToProperty().bind(cropToText.textProperty());
+        fragmentModel.cropWidthProperty().bind(cropWidthText.textProperty());
+        fragmentModel.cropHeightProperty().bind(cropHeightText.textProperty());
     }
 
     @FXML

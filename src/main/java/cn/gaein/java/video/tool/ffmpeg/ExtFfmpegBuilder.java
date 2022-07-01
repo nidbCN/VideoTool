@@ -43,7 +43,7 @@ public class ExtFfmpegBuilder extends FFmpegBuilder {
     public List<String> build() {
         var result = super.build();
         var list = new ArrayList<>(result);
-        var index = list.size() - 3;
+        var index = list.size() - 1;
 
         // add stop time
         if (stopTime != null) {
