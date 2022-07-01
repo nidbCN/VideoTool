@@ -50,10 +50,6 @@ public class DialogHelper {
         config.accept(builder);
 
         var dialog = builder.get();
-        dialog.setMaxWidth(600);
-        dialog.setMaxHeight(400);
-        dialog.setWidth(600);
-        dialog.setHeight(400);
 
         var confirmBtn = new MFXButton("确定");
         confirmBtn.setButtonType(ButtonType.RAISED);
