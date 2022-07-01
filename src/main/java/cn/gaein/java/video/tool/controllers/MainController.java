@@ -26,9 +26,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.attribute.PosixFilePermission;
-import java.nio.file.attribute.PosixFilePermissions;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Objects;
+import java.util.ResourceBundle;
 import java.util.concurrent.*;
 
 /**
@@ -158,6 +159,7 @@ public class MainController implements Initializable {
         dialog.setHeight(400);
         dialog.show();
     }
+
     private VideoFragment fragmentInEdit;
 
     @FXML
@@ -321,17 +323,11 @@ public class MainController implements Initializable {
             );
         } else {
             var taskList = new ArrayList<Callable<Boolean>>(fragmentList.size());
+
             // create temp path
-            var permissions = new HashSet<PosixFilePermission>(2);
-            // permissions.add(PosixFilePermission.OWNER_READ);
-            permissions.add(PosixFilePermission.OWNER_WRITE);
             Path tempPath;
             try {
-                tempPath = Files.createTempDirectory(
-                        "VideoToolsExport",
-                        PosixFilePermissions.asFileAttribute(permissions)
-                );
-                System.out.println(tempPath.getRoot());
+                tempPath = Files.createTempDirectory("VideoToolsExport");
             } catch (IOException e) {
                 e.printStackTrace();
                 return;
@@ -343,7 +339,8 @@ public class MainController implements Initializable {
                     fragment.edit(builder -> builder
                             .setStopTime(fragment.getEndTime().getTime(), TimeUnit.MILLISECONDS)
                             .setStartOffset(fragment.getStartTime().getTime(), TimeUnit.MILLISECONDS)
-                            .addOutput(tempPath.getRoot().toString() + fragment.getDisplayName())
+                            .addOutput(tempPath.toString() + fragment.getDisplayName() + ".mkv")
+                            .setAudioCodec("flac")
                             .done());
                     executor.createJob(fragment.getBuilder()).run();
                     return true;
