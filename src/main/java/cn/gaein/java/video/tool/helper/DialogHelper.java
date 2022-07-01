@@ -33,6 +33,7 @@ public class DialogHelper {
                 .setContentText(content)
                 .setShowMinimize(false)
                 .setShowAlwaysOnTop(false)
+                .makeScrollable(true)
                 .addStylesheets(Objects.requireNonNull(MainApplication.class.getResource("styles/Fonts.css")).toExternalForm())
                 .addStylesheets(Objects.requireNonNull(MainApplication.class.getResource("styles/Global.css")).toExternalForm())
                 .addStyleClasses("source-font");
@@ -51,6 +52,8 @@ public class DialogHelper {
         var dialog = builder.get();
         dialog.setMaxWidth(600);
         dialog.setMaxHeight(400);
+        dialog.setWidth(600);
+        dialog.setHeight(400);
 
         var confirmBtn = new MFXButton("确定");
         confirmBtn.setButtonType(ButtonType.RAISED);

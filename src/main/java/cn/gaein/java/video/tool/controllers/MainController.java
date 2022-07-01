@@ -29,15 +29,16 @@ import java.nio.file.Path;
 import java.nio.file.attribute.PosixFilePermission;
 import java.nio.file.attribute.PosixFilePermissions;
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  * @author Gaein
  */
 public class MainController implements Initializable {
+    @FXML
+    private MFXButton showMediaInfoBtn;
+    @FXML
+    private MFXButton exportSettingBtn;
     @FXML
     private MFXButton outputDeleteBtn;
     @FXML
@@ -149,6 +150,11 @@ public class MainController implements Initializable {
         playerView.stop();
     }
 
+    @FXML
+    protected void onShowMediaInfoClicked() {
+        var info = playerView.getMediaInfo();
+        dialogHelper.getInfoDialog(info).show();
+    }
     private VideoFragment fragmentInEdit;
 
     @FXML
@@ -222,6 +228,11 @@ public class MainController implements Initializable {
     }
 
     @FXML
+    protected void onExportSettingClicked() {
+
+    }
+
+    @FXML
     protected void onRemoveOutputClicked() {
         var fragmentList = outputFileList.getItems();
         var selection = outputFileList.getSelectionModel();
@@ -280,7 +291,7 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    protected void onExportOutputClicked() {
+    protected void onExportOutputClicked() throws InterruptedException {
         var fragmentList = outputFileList.getItems();
 
         if (fragmentList.size() == 0) {
@@ -306,10 +317,10 @@ public class MainController implements Initializable {
                     -> executor.createJob(fragment.getBuilder()).run()
             );
         } else {
-            var taskList = new ArrayList<Runnable>(fragmentList.size());
+            var taskList = new ArrayList<Callable<Boolean>>(fragmentList.size());
             // create temp path
             var permissions = new HashSet<PosixFilePermission>(2);
-            permissions.add(PosixFilePermission.OWNER_READ);
+            // permissions.add(PosixFilePermission.OWNER_READ);
             permissions.add(PosixFilePermission.OWNER_WRITE);
             Path tempPath;
             try {
@@ -317,6 +328,7 @@ public class MainController implements Initializable {
                         "VideoToolsExport",
                         PosixFilePermissions.asFileAttribute(permissions)
                 );
+                System.out.println(tempPath.getRoot());
             } catch (IOException e) {
                 e.printStackTrace();
                 return;
@@ -324,12 +336,19 @@ public class MainController implements Initializable {
 
             for (var fragment : fragmentList) {
                 // TODO queue export
-                taskList.add(() -> fragment.edit(builder -> builder
-                        .setStopTime(fragment.getEndTime().getTime(), TimeUnit.MILLISECONDS)
-                        .setStartOffset(fragment.getStartTime().getTime(), TimeUnit.MILLISECONDS)
-                        .addOutput(tempPath.getRoot().toString() + fragment.getDisplayName())
-                        .done()));
+                taskList.add(() -> {
+                    fragment.edit(builder -> builder
+                            .setStopTime(fragment.getEndTime().getTime(), TimeUnit.MILLISECONDS)
+                            .setStartOffset(fragment.getStartTime().getTime(), TimeUnit.MILLISECONDS)
+                            .addOutput(tempPath.getRoot().toString() + fragment.getDisplayName())
+                            .done());
+                    executor.createJob(fragment.getBuilder()).run();
+                    return true;
+                });
             }
+
+            executorService.invokeAll(taskList);
+            System.out.println("Complete");
         }
 
         stage.getScene().getWindow().setOnCloseRequest(e -> {

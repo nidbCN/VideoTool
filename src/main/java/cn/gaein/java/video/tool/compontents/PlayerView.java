@@ -209,6 +209,27 @@ public class PlayerView extends VBox {
         this.playerFactory = playerFactory;
     }
 
+    public String getMediaInfo() {
+        var info = player.media().info();
+
+        return "文件:\n\t" + info.mrl() +
+                "\n" +
+                "时长:\n\t" + new VideoTime(info.duration()).toLongString() +
+                "\n" +
+                "视频轨道:\n\t" + String.join("\n\t", info.videoTracks().stream().map(t ->
+                "[" + t.id() + "]" + t.description() + "-" + t.language() + ":" + t.width() + "x" + t.height()
+                        + " in " + t.codecName()
+        ).toList()) +
+                "\n" +
+                "音频轨道:\n\t" + String.join("\n\t", info.audioTracks().stream().map(t ->
+                "[" + t.id() + "]" + t.description() + "-" + t.language() + ": in " + t.codecName() + " at " + t.rate()
+        ).toList()) +
+                "\n" +
+                "字幕轨道:\n\t" + String.join("\n\t", info.textTracks().stream().map(t ->
+                "[" + t.id() + "]" + t.description() + "-" + t.language() + ":" + " in " + t.codecName()
+        ).toList());
+    }
+
     public Video getVideo() {
         return video;
     }
