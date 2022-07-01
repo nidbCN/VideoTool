@@ -36,6 +36,13 @@
         <VBox spacing="16">
             <PlayerView fx:id="playerView"/>
             <HBox spacing="16">
+                <MFXButton fx:id="showMediaInfoBtn" buttonType="RAISED" styleClass="primary, source-font"
+                           prefWidth="96" prefHeight="32" text="媒体信息"
+                           onMouseClicked="#onShowMediaInfoClicked">
+                    <graphic>
+                        <FontIcon iconColor="white" iconLiteral="mdi2f-flag-plus"/>
+                    </graphic>
+                </MFXButton>
                 <MFXButton fx:id="flagStartBtn" buttonType="RAISED" styleClass="primary, source-font"
                            prefWidth="96" prefHeight="32" text="片段开始"
                            onMouseClicked="#onFlagStartClicked">
@@ -62,6 +69,13 @@
                            onMouseClicked="#onFlagCancelClicked">
                     <graphic>
                         <FontIcon iconLiteral="mdi2f-flag-remove" iconColor="white"/>
+                    </graphic>
+                </MFXButton>
+                <MFXButton fx:id="exportSettingBtn" buttonType="RAISED" styleClass="primary, source-font"
+                           prefWidth="96" prefHeight="32" text="导出设置"
+                           onMouseClicked="#onExportSettingClicked">
+                    <graphic>
+                        <FontIcon iconLiteral="mdi2c-content-save-settings" iconColor="white"/>
                     </graphic>
                 </MFXButton>
             </HBox>
