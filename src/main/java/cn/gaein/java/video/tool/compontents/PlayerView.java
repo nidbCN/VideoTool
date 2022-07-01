@@ -212,7 +212,9 @@ public class PlayerView extends VBox {
     public String getMediaInfo() {
         var info = player.media().info();
 
-        return "文件:\n\t" + info.mrl() +
+        return info == null
+                ? "未打开媒体，无法查看媒体信息"
+                : "文件:\n\t" + info.mrl() +
                 "\n" +
                 "时长:\n\t" + new VideoTime(info.duration()).toLongString() +
                 "\n" +
