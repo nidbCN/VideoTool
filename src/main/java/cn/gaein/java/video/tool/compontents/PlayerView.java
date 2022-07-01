@@ -242,4 +242,10 @@ public class PlayerView extends VBox {
     public void stop() {
         player.controls().stop();
     }
+
+    public void dispose() {
+        stop();
+        player.release();
+        playerFactory.release();
+    }
 }

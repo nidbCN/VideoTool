@@ -1,5 +1,6 @@
 package cn.gaein.java.video.tool.controllers;
 
+import cn.gaein.java.video.tool.MainApplication;
 import cn.gaein.java.video.tool.compontents.PlayerView;
 import cn.gaein.java.video.tool.compontents.cell.FragmentCell;
 import cn.gaein.java.video.tool.compontents.cell.VideoCell;
@@ -10,9 +11,10 @@ import cn.gaein.java.video.tool.utils.FileExtensions;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXListView;
 import io.github.palexdev.materialfx.utils.others.FunctionalStringConverter;
-import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -22,9 +24,18 @@ import net.bramp.ffmpeg.FFprobe;
 
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.attribute.PosixFilePermission;
+import java.nio.file.attribute.PosixFilePermissions;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.ResourceBundle;
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Gaein
@@ -63,7 +74,7 @@ public class MainController implements Initializable {
     private DialogHelper dialogHelper;
     private FFmpegExecutor executor;
     private final ExecutorService executorService
-            = new ThreadPoolExecutor(4,8,0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>());
+            = new ThreadPoolExecutor(4, 8, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>());
 
     public MainController(Stage stage) {
         this.stage = stage;
@@ -166,7 +177,7 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    protected void onFlagEditClicked() {
+    protected void onFlagEditClicked() throws IOException {
         var video = playerView.getVideo();
         if (video == null) {
             dialogHelper.getErrorDialog("未选中视频，无法编辑片段").show();
@@ -178,6 +189,18 @@ public class MainController implements Initializable {
                     config.setOwnerNode(mainPane)).show();
             return;
         }
+
+        playerView.pause();
+
+        var loader = new FXMLLoader(
+                MainApplication.class.getResource("fragment-view.fxml"));
+        loader.setControllerFactory(c -> new FragmentController(fragmentInEdit));
+        var scene = new Scene(loader.load(), 800, 600);
+        var editStage = new Stage();
+        editStage.setScene(scene);
+        editStage.setTitle("编辑片段" + fragmentInEdit.getDisplayName());
+        editStage.setResizable(false);
+        editStage.showAndWait();
 
         // just for test
         var outputFileListArr = outputFileList.getItems();
@@ -278,23 +301,41 @@ public class MainController implements Initializable {
                     .addOutput(file.getPath())
                     .done());
 
-            var task = new Task<Void>() {
-                @Override
-                protected Void call() {
-                    executor.createJob(fragment.getBuilder()).run();
-                    return null;
-                }
-            };
-            executorService.submit(task);
-
+            executorService.submit(()
+                    -> executor.createJob(fragment.getBuilder()).run()
+            );
         } else {
+            var taskList = new ArrayList<Runnable>(fragmentList.size());
+            // create temp path
+            var permissions = new HashSet<PosixFilePermission>(2);
+            permissions.add(PosixFilePermission.OWNER_READ);
+            permissions.add(PosixFilePermission.OWNER_WRITE);
+            Path tempPath;
+            try {
+                tempPath = Files.createTempDirectory(
+                        "VideoToolsExport",
+                        PosixFilePermissions.asFileAttribute(permissions)
+                );
+            } catch (IOException e) {
+                e.printStackTrace();
+                return;
+            }
+
             for (var fragment : fragmentList) {
                 // TODO queue export
+                taskList.add(() -> fragment.edit(builder -> builder
+                        .setStopTime(fragment.getEndTime().getTime(), TimeUnit.MILLISECONDS)
+                        .setStartOffset(fragment.getStartTime().getTime(), TimeUnit.MILLISECONDS)
+                        .addOutput(tempPath.getRoot().toString() + fragment.getDisplayName())
+                        .done()));
             }
+
+
         }
 
         stage.getScene().getWindow().setOnCloseRequest(e -> {
-
+            executorService.shutdown();
+            playerView.dispose();
         });
     }
 }
