@@ -9,6 +9,8 @@ A video tool powered by ffmpeg, vlc and javafx.
 * [libvlc](https://www.videolan.org/vlc/libvlc.html)
 * [ffmpeg](https://ffmpeg.org/)
 
+> ATTENTION: vlc installed by scoop is not supported
+
 ### Java Runtime
 
 * Java 17
