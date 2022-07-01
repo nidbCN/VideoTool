@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--suppress JavaFxRedundantPropertyValue -->
+<?import io.github.palexdev.materialfx.controls.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.*?>
+<StackPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="cn.gaein.java.video.tool.controllers.FragmentController">
+    <VBox spacing="16">
+        <padding>
+            <Insets top="16" right="16" bottom="16" left="16"/>
+        </padding>
+        <MFXToggleButton fx:id="disableAudioBtn" text="去除音频"/>
+        <VBox>
+            <MFXToggleButton fx:id="enableCropBtn" text="裁剪画面"/>
+            <HBox spacing="16">
+                <MFXTextField fx:id="cropFromText" floatingText="x坐标"/>
+                <MFXTextField fx:id="cropToText" floatingText="y坐标"/>
+                <MFXTextField fx:id="cropWidthText" floatingText="宽度"/>
+                <MFXTextField fx:id="cropHeightText" floatingText="高度"/>
+            </HBox>
+        </VBox>
+        <HBox spacing="16">
+            <MFXButton fx:id="cancelBtn" text="取消"/>
+            <MFXButton fx:id="saveBtn" text="保存"/>
+        </HBox>
+    </VBox>
+</StackPane>
