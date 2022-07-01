@@ -21,6 +21,15 @@ public class ExtFfmpegBuilder extends FFmpegBuilder {
         return this;
     }
 
+    public ExtFfmpegBuilder addOption(String command) {
+        if (command == null) {
+            throw new IllegalArgumentException("command cannot be null");
+        }
+
+        options.add(new ExtFfmpegOption(command));
+        return this;
+    }
+
     public ExtFfmpegBuilder addOption(String command, String value) {
         if (command == null) {
             throw new IllegalArgumentException("command cannot be null");
