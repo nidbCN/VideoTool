@@ -1,6 +1,9 @@
 package cn.gaein.java.video.tool.models;
 
-import javafx.beans.property.*;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 /**
  * @author Gaein
@@ -20,9 +23,6 @@ public class FragmentViewModel {
             = new SimpleStringProperty("600");
     private final BooleanProperty enableEncode
             = new SimpleBooleanProperty();
-
-    private final StringProperty encoder
-            = new SimpleStringProperty("h264");
 
     public BooleanProperty disableAudioProperty() {
         return disableAudio;
@@ -50,9 +50,5 @@ public class FragmentViewModel {
 
     public BooleanProperty enableEncodeProperty() {
         return enableEncode;
-    }
-
-    public StringProperty encoderProperty() {
-        return encoder;
     }
 }

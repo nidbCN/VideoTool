@@ -23,9 +23,8 @@
             </HBox>
         </VBox>
         <VBox>
-            <MFXToggleButton fx:id="enableEncodeBtn" text="重新编码"/>
-            <Label styleClass="source-font" text="注意：裁剪画面等需要重新编码的会自动启用此项，编码与视频文件格式不兼容可能会出现问题"/>
-            <MFXComboBox fx:id="encoderList" text="Codec"/>
+            <MFXToggleButton fx:id="enableEncodeBtn" value="true" text="重新编码"/>
+            <Label styleClass="source-font" text="注意：不重新编码可以有效提高导出速度，但是容易造成结果不正常"/>
         </VBox>
         <HBox spacing="16">
             <MFXButton fx:id="cancelBtn" text="取消" buttonType="RAISED" styleClass="normal"
