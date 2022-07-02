@@ -12,9 +12,15 @@ import java.util.concurrent.TimeUnit;
  * @author Gaein
  */
 public class ExtFfmpegBuilder extends FFmpegBuilder {
+    private Long startTime;
     private Long stopTime;
     private final ArrayList<ExtFfmpegOption> options
             = new ArrayList<>();
+
+    public ExtFfmpegBuilder setStartTime(long time, TimeUnit units) {
+        startTime = units.toMillis(time);
+        return this;
+    }
 
     public ExtFfmpegBuilder setStopTime(long time, TimeUnit units) {
         stopTime = units.toMillis(time);
@@ -43,19 +49,31 @@ public class ExtFfmpegBuilder extends FFmpegBuilder {
     public List<String> build() {
         var result = super.build();
         var list = new ArrayList<>(result);
-        var index = list.size() - 1;
+        var inputIndex = 0;
 
+        var i = 0;
+        for (var command : result) {
+            if ("-i".equals(command)) {
+                inputIndex = i + 2;
+                break;
+            }
+            i++;
+        }
+
+        if (startTime != null) {
+            list.add(inputIndex++, "-ss");
+            list.add(inputIndex++, FFmpegUtils.toTimecode(startTime, TimeUnit.MILLISECONDS));
+        }
         // add stop time
         if (stopTime != null) {
-            list.add(index++, "-to");
-            list.add(index++, FFmpegUtils.toTimecode(stopTime, TimeUnit.MILLISECONDS));
+            list.add(inputIndex++, "-to");
+            list.add(inputIndex++, FFmpegUtils.toTimecode(stopTime, TimeUnit.MILLISECONDS));
         }
 
         // add options
         for (var option : options) {
             var optionInList = option.getOption();
-            list.addAll(index, optionInList);
-            index += optionInList.size();
+            list.addAll(list.size() - 1, optionInList);
         }
 
         return list;
