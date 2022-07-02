@@ -104,8 +104,8 @@ public class FragmentController implements Initializable {
 
         if (fragmentModel.enableEncodeProperty().get()) {
             fragment.edit(builder -> builder
-                    .addOption("-vcodec", "rawvideo")
-                    .addOption("-acodec", "pcm_s16le")
+                    .addOption("-vcodec", "h264")
+                    .addOption("-acodec", "aac")
             );
         }
 

@@ -213,7 +213,7 @@ public class MainController implements Initializable {
         );
 
         editStage.setScene(scene);
-        editStage.setTitle("编辑片段" + fragmentInEdit.getDisplayName());
+        editStage.setTitle("编辑片段: " + fragmentInEdit.getDisplayName());
         editStage.setResizable(false);
         editStage.showAndWait();
 
@@ -297,7 +297,7 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    protected void onExportOutputClicked() throws InterruptedException {
+    protected void onExportOutputClicked() {
         var fragmentList = outputFileList.getItems();
 
         if (fragmentList.size() == 0) {
@@ -316,8 +316,8 @@ public class MainController implements Initializable {
             // direct export
             var fragment = fragmentList.get(0);
             fragment.edit(builder -> builder
+                    .setStartTime(fragment.getStartTime().getTime(), TimeUnit.MILLISECONDS)
                     .setStopTime(fragment.getEndTime().getTime(), TimeUnit.MILLISECONDS)
-                    .setStartOffset(fragment.getStartTime().getTime(), TimeUnit.MILLISECONDS)
                     .addOutput(file.getPath())
                     .done());
 
@@ -337,9 +337,9 @@ public class MainController implements Initializable {
             var taskList = fragmentList.stream().map(f ->
                     (Callable<Void>) () -> {
                         f.edit(builder -> builder
+                                .setStartTime(f.getStartTime().getTime(), TimeUnit.MILLISECONDS)
                                 .setStopTime(f.getEndTime().getTime(), TimeUnit.MILLISECONDS)
-                                .setStartOffset(f.getStartTime().getTime(), TimeUnit.MILLISECONDS)
-                                .addOutput(Paths.get(tempPath.toString(), f.getDisplayName() + ".mkv").toString())
+                                .addOutput(Paths.get(tempPath.toString(), f.getDisplayName() + ".ts").toString())
                                 .done());
                         executor.createJob(f.getBuilder()).run();
                         return null;
@@ -358,7 +358,7 @@ public class MainController implements Initializable {
                         // build concat input string
                         builder.addInput("concat:\"" + String.join("|",
                                 fragmentList.stream().map(f ->
-                                        Paths.get(tempPath.toString(), f.getDisplayName() + ".mkv").toString()
+                                        Paths.get(tempPath.toString(), f.getDisplayName() + ".ts").toString()
                                 ).toList()) + "\""
                         );
 
