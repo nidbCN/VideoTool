@@ -53,7 +53,8 @@ public class ExtFfmpegBuilder extends FFmpegBuilder {
 
         // add options
         for (var option : options) {
-            list.addAll(index++, option.getOption());
+            list.addAll(index, option.getOption());
+            index += 2;
         }
 
         return list;
