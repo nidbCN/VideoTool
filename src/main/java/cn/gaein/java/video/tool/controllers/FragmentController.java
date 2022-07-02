@@ -104,7 +104,7 @@ public class FragmentController implements Initializable {
 
         if (fragmentModel.enableEncodeProperty().get()) {
             fragment.edit(builder -> builder
-                    .addOption("-vcodec", "h264")
+                    .addOption("-vcodec", "h265")
                     .addOption("-acodec", "aac")
             );
         }
