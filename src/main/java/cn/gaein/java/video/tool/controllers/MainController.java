@@ -4,6 +4,7 @@ import cn.gaein.java.video.tool.MainApplication;
 import cn.gaein.java.video.tool.compontents.PlayerView;
 import cn.gaein.java.video.tool.compontents.cell.FragmentCell;
 import cn.gaein.java.video.tool.compontents.cell.VideoCell;
+import cn.gaein.java.video.tool.ffmpeg.ExtFfmpegBuilder;
 import cn.gaein.java.video.tool.helper.DialogHelper;
 import cn.gaein.java.video.tool.models.Video;
 import cn.gaein.java.video.tool.models.VideoFragment;
@@ -26,7 +27,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
+import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -310,7 +311,9 @@ public class MainController implements Initializable {
         var file = chooser.showSaveDialog(stage);
 
         playerView.pause();
+
         if (fragmentList.size() == 1) {
+            // direct export
             var fragment = fragmentList.get(0);
             fragment.edit(builder -> builder
                     .setStopTime(fragment.getEndTime().getTime(), TimeUnit.MILLISECONDS)
@@ -322,33 +325,53 @@ public class MainController implements Initializable {
                     -> executor.createJob(fragment.getBuilder()).run()
             );
         } else {
-            var taskList = new ArrayList<Callable<Boolean>>(fragmentList.size());
-
-            // create temp path
+            // export
             Path tempPath;
             try {
-                tempPath = Files.createTempDirectory("VideoToolsExport");
+                tempPath = Files.createTempDirectory("VideoToolsExport_");
             } catch (IOException e) {
                 e.printStackTrace();
                 return;
             }
 
-            for (var fragment : fragmentList) {
-                // TODO queue export
-                taskList.add(() -> {
-                    fragment.edit(builder -> builder
-                            .setStopTime(fragment.getEndTime().getTime(), TimeUnit.MILLISECONDS)
-                            .setStartOffset(fragment.getStartTime().getTime(), TimeUnit.MILLISECONDS)
-                            .addOutput(tempPath.toString() + fragment.getDisplayName() + ".mkv")
-                            .setAudioCodec("flac")
-                            .done());
-                    executor.createJob(fragment.getBuilder()).run();
-                    return true;
-                });
-            }
+            var taskList = fragmentList.stream().map(f ->
+                    (Callable<Void>) () -> {
+                        f.edit(builder -> builder
+                                .setStopTime(f.getEndTime().getTime(), TimeUnit.MILLISECONDS)
+                                .setStartOffset(f.getStartTime().getTime(), TimeUnit.MILLISECONDS)
+                                .addOutput(Paths.get(tempPath.toString(), f.getDisplayName() + ".mkv").toString())
+                                .done());
+                        executor.createJob(f.getBuilder()).run();
+                        return null;
+                    }).toList();
 
-            executorService.invokeAll(taskList);
-            System.out.println("Complete");
+            executorService.submit(() -> {
+                        try {
+                            executorService.invokeAll(taskList);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                            return;
+                        }
+
+                        var builder = new ExtFfmpegBuilder();
+
+                        // build concat input string
+                        builder.addInput("concat:\"" + String.join("|",
+                                fragmentList.stream().map(f ->
+                                        Paths.get(tempPath.toString(), f.getDisplayName() + ".mkv").toString()
+                                ).toList()) + "\""
+                        );
+
+                        // TODO: apply export setting
+
+                        builder.addOutput(file.getPath())
+                                .setVideoCodec("h264")
+                                .setAudioCodec("aac")
+                                .done();
+
+                        executor.createJob(builder).run();
+                    }
+            );
         }
 
         stage.getScene().getWindow().setOnCloseRequest(e -> {
