@@ -23,7 +23,7 @@
             </HBox>
         </VBox>
         <VBox>
-            <MFXToggleButton fx:id="enableEncodeBtn" value="true" text="重新编码"/>
+            <MFXToggleButton fx:id="enableEncodeBtn" selected="true" text="重新编码"/>
             <Label styleClass="source-font" text="注意：不重新编码可以有效提高导出速度，但是容易造成结果不正常"/>
         </VBox>
         <HBox spacing="16">
