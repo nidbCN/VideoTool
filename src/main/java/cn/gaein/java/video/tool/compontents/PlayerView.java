@@ -171,9 +171,18 @@ public class PlayerView extends VBox {
         positionBar.setEffect(MFXDepthManager.shadowOf(DepthLevel.LEVEL2));
 
         timeString.set(time.toLongString());
+
         timeBar.setPopupSupplier(Region::new);
         timeBar.setPrefWidth(584);
         timeBar.valueProperty().bindBidirectional(position);
+        timeBar.valueProperty().addListener(((observable, oldValue, newValue) -> {
+            if (!player.status().isPlaying()) {
+                player.controls().nextFrame();
+                time.setTime(player.status().time());
+                timeString.set(time.toLongString());
+            }
+        }));
+
         timeLabel.getStyleClass().add("code-font");
         timeLabel.textProperty().bind(timeString);
 
@@ -184,7 +193,6 @@ public class PlayerView extends VBox {
 
         return positionBar;
     }
-
 
     private void resetDisplayView() {
         displayView.setImage(new Image(Objects.requireNonNull(
@@ -252,7 +260,9 @@ public class PlayerView extends VBox {
 
     public void pause() {
         if (player.status().canPause()) {
-            player.controls().pause();
+            if (player.status().isPlaying()) {
+                player.controls().pause();
+            }
         }
     }
 
