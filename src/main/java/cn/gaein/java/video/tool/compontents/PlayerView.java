@@ -254,8 +254,16 @@ public class PlayerView extends VBox {
 
     public void open() {
         player.media().play(
-                video.getFile().getPath(), "play-and-pause"
+                video.getFile().getAbsolutePath(), "play-and-pause"
         );
+    }
+
+    public void open(Video newVideo) {
+        player.media().play(
+                newVideo.getFile().getAbsolutePath(), "play-and-pause"
+        );
+
+        this.video = newVideo;
     }
 
     public void pause() {
@@ -276,9 +284,13 @@ public class PlayerView extends VBox {
         player.controls().stop();
     }
 
-    public void dispose() {
+    public void stopAndRelease() {
         stop();
         player.release();
+    }
+
+    public void dispose() {
+        stopAndRelease();
         playerFactory.release();
     }
 }
