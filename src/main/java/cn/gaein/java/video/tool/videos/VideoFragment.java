@@ -75,6 +75,15 @@ public class VideoFragment {
         return videoName + "_" + timeStr;
     }
 
+    public String getTempFileName() {
+        var videoName = video.getFile().getName();
+
+        var timeStr = (startTime == null ? "0" : startTime.toShortString("_")) +
+                "-" +
+                (endTime == null ? "0" : endTime.toShortString("_"));
+        return videoName + "_" + timeStr;
+    }
+
     @Override
     public String toString() {
         return getFullDisplayName();

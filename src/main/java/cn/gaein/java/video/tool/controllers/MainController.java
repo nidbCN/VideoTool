@@ -288,7 +288,7 @@ public class MainController implements Initializable {
             var outputBuilder = builder
                     .setStartTime(fragmentInEdit.getStartTime().getTime(), TimeUnit.MILLISECONDS)
                     .setStopTime(fragmentInEdit.getEndTime().getTime(), TimeUnit.MILLISECONDS)
-                    .addOutput(Paths.get(viewModel.getTempPath(), fragmentInEdit.getFullDisplayName() + ".mkv").toString());
+                    .addOutput(Paths.get(viewModel.getTempPath(), fragmentInEdit.getTempFileName() + ".mkv").toString());
             if (fragmentModel.isEnableEncode()) {
                 outputBuilder
                         .setVideoCodec("rawvideo")
@@ -446,7 +446,7 @@ public class MainController implements Initializable {
             // build concat input string
             builder.addInput("concat:\"" + String.join("|",
                     fragmentList.stream().map(f ->
-                            Paths.get(viewModel.getTempPath(), f.getFullDisplayName() + ".mkv").toString()
+                            Paths.get(viewModel.getTempPath(), f.getTempFileName() + ".mkv").toString()
                     ).toList()) + "\""
             );
 

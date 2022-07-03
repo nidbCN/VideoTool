@@ -35,7 +35,11 @@ public class VideoTime {
     }
 
     public String toShortString() {
-        return hour + ":" + minute + ":" + second + "." + millSec;
+        return toShortString(":");
+    }
+
+    public String toShortString(String split) {
+        return hour + split + minute + split + second + split;
     }
 
     public long getTime() {
