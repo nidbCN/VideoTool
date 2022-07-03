@@ -12,7 +12,7 @@ import java.nio.file.Path;
  */
 public class MainViewModel {
     private final StringProperty status
-            = new SimpleStringProperty("空闲");
+            = new SimpleStringProperty("等待操作");
     private final String tempPath
             = Files.createTempDirectory(Path.of("D:\\Temp"), "VideoToolsExport_").toString();
     private final StringProperty cacheSpace

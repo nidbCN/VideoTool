@@ -286,16 +286,17 @@ public class MainController implements Initializable {
 
         fragmentInEdit.edit(builder -> {
             var outputBuilder = builder
-                    .addOutput(Paths.get(viewModel.getTempPath(), fragmentInEdit.getDisplayName() + ".ts").toString());
-            if
-        });
+                    .setStartTime(fragmentInEdit.getStartTime().getTime(), TimeUnit.MILLISECONDS)
+                    .setStopTime(fragmentInEdit.getEndTime().getTime(), TimeUnit.MILLISECONDS)
+                    .addOutput(Paths.get(viewModel.getTempPath(), fragmentInEdit.getDisplayName() + ".mkv").toString());
+            if (fragmentModel.isEnableEncode()) {
+                outputBuilder
+                        .setVideoCodec("rawvideo")
+                        .setAudioCodec("pcm_s16le");
+            }
 
-        if (fragmentModel.enableEncodeProperty().get()) {
-            fragmentInEdit.edit(builder -> builder
-                    .addOption("-vcodec", "h264")
-                    .addOption("-acodec", "aac")
-            );
-        }
+            outputBuilder.done();
+        });
 
         var outputFileListArr = outputFileList.getItems();
         outputFileListArr.add(fragmentInEdit);
@@ -398,7 +399,7 @@ public class MainController implements Initializable {
 
     private void unsetStatus() {
         Platform.runLater(() -> {
-            viewModel.statusProperty().set("空闲");
+            viewModel.statusProperty().set("等待操作");
             statusBar.progressProperty().unbind();
             statusBar.progressProperty().set(0);
         });
@@ -426,17 +427,12 @@ public class MainController implements Initializable {
             // export fragments
             var processOrder = 0;
             for (var fragment : fragmentList) {
-                fragment.edit(builder -> builder
-                        .setStartTime(fragment.getStartTime().getTime(), TimeUnit.MILLISECONDS)
-                        .setStopTime(fragment.getEndTime().getTime(), TimeUnit.MILLISECONDS)
-                );
-
                 var time = fragment.getEndTime().getTime() - fragment.getStartTime().getTime();
                 totalTime += time;
 
                 var listener = new ExtFfmpegProgressListener(time);
 
-                setStatus("编码 " + processOrder + "/" + fragmentList.size(), listener.workProgressProperty());
+                setStatus("导出片段 " + processOrder + "/" + fragmentList.size(), listener.workProgressProperty());
                 executor.createJob(fragment.getBuilder(), listener).run();
                 unsetStatus();
 
@@ -447,7 +443,7 @@ public class MainController implements Initializable {
             // build concat input string
             builder.addInput("concat:\"" + String.join("|",
                     fragmentList.stream().map(f ->
-                            Paths.get(viewModel.getTempPath(), f.getDisplayName() + ".ts").toString()
+                            Paths.get(viewModel.getTempPath(), f.getDisplayName() + ".mkv").toString()
                     ).toList()) + "\""
             );
 
@@ -473,7 +469,7 @@ public class MainController implements Initializable {
 
             var listener = new ExtFfmpegProgressListener(totalTime);
 
-            setStatus("导出序列", listener.workProgressProperty());
+            setStatus("编码序列", listener.workProgressProperty());
             executor.createJob(builder, listener).run();
             unsetStatus();
         });
