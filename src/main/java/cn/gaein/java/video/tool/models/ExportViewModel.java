@@ -42,4 +42,28 @@ public class ExportViewModel {
     public StringProperty audioRateProperty() {
         return audioRate;
     }
+
+    public boolean isDisableAudio() {
+        return disableAudio.get();
+    }
+
+    public boolean isEnableEncode() {
+        return enableEncode.get();
+    }
+
+    public String getVideoCodec() {
+        return videoCodec.get();
+    }
+
+    public String getAudioCodec() {
+        return audioCodec.get();
+    }
+
+    public String getVideoRate() {
+        return videoRate.get();
+    }
+
+    public String getAudioRate() {
+        return audioRate.get();
+    }
 }
