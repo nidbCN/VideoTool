@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--suppress JavaFxRedundantPropertyValue -->
+<?import io.github.palexdev.materialfx.controls.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.*?>
+<StackPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="cn.gaein.java.video.tool.controllers.ExportController">
+    <VBox spacing="16">
+        <padding>
+            <Insets top="16" right="16" bottom="16" left="16"/>
+        </padding>
+        <MFXToggleButton fx:id="disableAudioBtn" styleClass="source-font" text="去除音频"/>
+        <VBox>
+            <MFXToggleButton fx:id="enableEncodeBtn" styleClass="source-font" selected="true" text="重新编码"/>
+            <Label styleClass="source-font" text="注意：不重新编码可以有效提高导出速度，但是容易造成结果不正常"/>
+            <HBox spacing="16">
+                <MFXComboBox fx:id="videoCodecList" styleClass="source-font" floatingText="视频编码器"/>
+                <MFXComboBox fx:id="audioCodecList" styleClass="source-font" floatingText="音频编码器"/>
+            </HBox>
+        </VBox>
+        <VBox>
+            <HBox spacing="16">
+                <MFXTextField fx:id="videoRate" styleClass="source-font" floatingText="视频码率"/>
+                <MFXTextField fx:id="audioRate" styleClass="source-font" floatingText="音频码率"/>
+            </HBox>
+            <Label styleClass="source-font" text="单位: kbps"/>
+        </VBox>
+        <HBox spacing="16">
+            <MFXButton fx:id="closeBtn" text="确定" buttonType="RAISED" styleClass="normal, source-font"
+                       onMouseClicked="#onCloseBtnClicked"/>
+        </HBox>
+    </VBox>
+</StackPane>
