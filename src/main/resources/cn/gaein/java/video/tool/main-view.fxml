@@ -4,120 +4,140 @@
 <?import cn.gaein.java.video.tool.compontents.PlayerView?>
 <?import io.github.palexdev.materialfx.controls.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.*?>
 <?import org.kordamp.ikonli.javafx.*?>
 <StackPane xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
            fx:id="mainPane"
            fx:controller="cn.gaein.java.video.tool.controllers.MainController">
-    <HBox spacing="16">
+    <VBox spacing="16">
         <padding>
             <Insets top="16" right="16" bottom="16" left="16"/>
         </padding>
-        <VBox spacing="16">
-            <MFXListView fx:id="inputFileList" prefWidth="200" prefHeight="490"/>
-            <HBox spacing="8">
-                <MFXButton fx:id="inputAddBtn" buttonType="RAISED" styleClass="primary, source-font"
-                           prefWidth="96" prefHeight="32" text="添加视频"
-                           onMouseClicked="#onAddInputClicked">
-                    <graphic>
-                        <FontIcon iconColor="white" iconLiteral="mdi2p-plus"/>
-                    </graphic>
-                </MFXButton>
-                <MFXButton fx:id="inputRemoveBtn" buttonType="RAISED" styleClass="primary, source-font"
-                           prefWidth="96" prefHeight="32" text="移除视频"
-                           onMouseClicked="#onRemoveInputClicked">
-                    <graphic>
-                        <FontIcon iconColor="white" iconLiteral="mdi2m-minus"/>
-                    </graphic>
-                </MFXButton>
-            </HBox>
-        </VBox>
-        <VBox spacing="16">
-            <PlayerView fx:id="playerView"/>
-            <HBox spacing="16">
-                <MFXButton fx:id="showMediaInfoBtn" buttonType="RAISED" styleClass="primary, source-font"
-                           prefWidth="96" prefHeight="32" text="媒体信息"
-                           onMouseClicked="#onShowMediaInfoClicked">
-                    <graphic>
-                        <FontIcon iconColor="white" iconLiteral="mdi2f-flag-plus"/>
-                    </graphic>
-                </MFXButton>
-                <MFXButton fx:id="flagStartBtn" buttonType="RAISED" styleClass="primary, source-font"
-                           prefWidth="96" prefHeight="32" text="片段开始"
-                           onMouseClicked="#onFlagStartClicked">
-                    <graphic>
-                        <FontIcon iconColor="white" iconLiteral="mdi2f-flag-plus"/>
-                    </graphic>
-                </MFXButton>
-                <MFXButton fx:id="flagCompleteBtn" buttonType="RAISED" styleClass="primary, source-font"
-                           prefWidth="96" prefHeight="32" text="片段结束"
-                           onMouseClicked="#onFlagCompleteClicked">
-                    <graphic>
-                        <FontIcon iconColor="white" iconLiteral="mdi2f-flag"/>
-                    </graphic>
-                </MFXButton>
-                <MFXButton fx:id="flagEditBtn" buttonType="RAISED" styleClass="primary, source-font"
-                           prefWidth="96" prefHeight="32" text="编辑片段"
-                           onMouseClicked="#onFlagEditClicked">
-                    <graphic>
-                        <FontIcon iconLiteral="mdi2f-flag-checkered" iconColor="white"/>
-                    </graphic>
-                </MFXButton>
-                <MFXButton fx:id="flagCancelBtn" buttonType="RAISED" styleClass="primary, source-font"
-                           prefWidth="96" prefHeight="32" text="取消片段"
-                           onMouseClicked="#onFlagCancelClicked">
-                    <graphic>
-                        <FontIcon iconLiteral="mdi2f-flag-remove" iconColor="white"/>
-                    </graphic>
-                </MFXButton>
-                <MFXButton fx:id="exportSettingBtn" buttonType="RAISED" styleClass="primary, source-font"
-                           prefWidth="96" prefHeight="32" text="导出设置"
-                           onMouseClicked="#onExportSettingClicked">
-                    <graphic>
-                        <FontIcon iconLiteral="mdi2c-content-save-settings" iconColor="white"/>
-                    </graphic>
-                </MFXButton>
-            </HBox>
-        </VBox>
-        <VBox spacing="16">
-            <MFXListView fx:id="outputFileList" prefWidth="240" prefHeight="490"/>
-            <HBox spacing="24">
-                <MFXButton fx:id="exportOutputBtn" buttonType="RAISED" styleClass="primary, source-font"
-                           prefWidth="96" prefHeight="32" text="导出序列"
-                           onMouseClicked="#onExportOutputClicked"
-                >
-                    <graphic>
-                        <FontIcon iconLiteral="mdi2f-file-export" iconColor="white"/>
-                    </graphic>
-                </MFXButton>
-                <HBox spacing="4">
-                    <MFXButton fx:id="outputMoveUpBtn" buttonType="RAISED"
-                               prefWidth="32" prefHeight="32" text=""
-                               onMouseClicked="#onMoveUpOutputClicked">
+        <!-- MAIN SPACE -->
+        <HBox spacing="16">
+            <!-- INPUT LIST -->
+            <VBox spacing="16">
+                <MFXListView fx:id="inputFileList" prefWidth="200" prefHeight="490"/>
+                <HBox spacing="8">
+                    <MFXButton fx:id="inputAddBtn" buttonType="RAISED" styleClass="primary, source-font"
+                               prefWidth="96" prefHeight="32" text="添加视频"
+                               onMouseClicked="#onAddInputClicked">
                         <graphic>
-                            <FontIcon iconColor="#7a0ed9" iconSize="20"
-                                      iconLiteral="mdi2a-arrow-up-drop-circle-outline"/>
+                            <FontIcon iconColor="white" iconLiteral="mdi2p-plus"/>
                         </graphic>
                     </MFXButton>
-                    <MFXButton fx:id="outputMoveDownBtn" buttonType="RAISED"
-                               prefWidth="32" prefHeight="32" text=""
-                               onMouseClicked="#onMoveDownOutputClicked">
+                    <MFXButton fx:id="inputRemoveBtn" buttonType="RAISED" styleClass="primary, source-font"
+                               prefWidth="96" prefHeight="32" text="移除视频"
+                               onMouseClicked="#onRemoveInputClicked">
                         <graphic>
-                            <FontIcon iconColor="#7a0ed9" iconSize="20"
-                                      iconLiteral="mdi2a-arrow-down-drop-circle-outline"/>
-                        </graphic>
-                    </MFXButton>
-                    <MFXButton fx:id="outputDeleteBtn" buttonType="RAISED"
-                               prefWidth="32" prefHeight="32" text=""
-                               onMouseClicked="#onRemoveOutputClicked">
-                        <graphic>
-                            <FontIcon iconColor="#7a0ed9" iconSize="20"
-                                      iconLiteral="mdi2m-minus"/>
+                            <FontIcon iconColor="white" iconLiteral="mdi2m-minus"/>
                         </graphic>
                     </MFXButton>
                 </HBox>
+            </VBox>
+            <!-- VIDEO PLAYER -->
+            <VBox spacing="16">
+                <PlayerView fx:id="playerView"/>
+                <HBox spacing="16">
+                    <MFXButton fx:id="showMediaInfoBtn" buttonType="RAISED" styleClass="primary, source-font"
+                               prefWidth="96" prefHeight="32" text="媒体信息"
+                               onMouseClicked="#onShowMediaInfoClicked">
+                        <graphic>
+                            <FontIcon iconColor="white" iconLiteral="mdi2f-flag-plus"/>
+                        </graphic>
+                    </MFXButton>
+                    <MFXButton fx:id="flagStartBtn" buttonType="RAISED" styleClass="primary, source-font"
+                               prefWidth="96" prefHeight="32" text="片段开始"
+                               onMouseClicked="#onFlagStartClicked">
+                        <graphic>
+                            <FontIcon iconColor="white" iconLiteral="mdi2f-flag-plus"/>
+                        </graphic>
+                    </MFXButton>
+                    <MFXButton fx:id="flagCompleteBtn" buttonType="RAISED" styleClass="primary, source-font"
+                               prefWidth="96" prefHeight="32" text="片段结束"
+                               onMouseClicked="#onFlagCompleteClicked">
+                        <graphic>
+                            <FontIcon iconColor="white" iconLiteral="mdi2f-flag"/>
+                        </graphic>
+                    </MFXButton>
+                    <MFXButton fx:id="flagEditBtn" buttonType="RAISED" styleClass="primary, source-font"
+                               prefWidth="96" prefHeight="32" text="编辑片段"
+                               onMouseClicked="#onFlagEditClicked">
+                        <graphic>
+                            <FontIcon iconLiteral="mdi2f-flag-checkered" iconColor="white"/>
+                        </graphic>
+                    </MFXButton>
+                    <MFXButton fx:id="flagCancelBtn" buttonType="RAISED" styleClass="primary, source-font"
+                               prefWidth="96" prefHeight="32" text="取消片段"
+                               onMouseClicked="#onFlagCancelClicked">
+                        <graphic>
+                            <FontIcon iconLiteral="mdi2f-flag-remove" iconColor="white"/>
+                        </graphic>
+                    </MFXButton>
+                    <MFXButton fx:id="exportSettingBtn" buttonType="RAISED" styleClass="primary, source-font"
+                               prefWidth="96" prefHeight="32" text="导出设置"
+                               onMouseClicked="#onExportSettingClicked">
+                        <graphic>
+                            <FontIcon iconLiteral="mdi2c-content-save-settings" iconColor="white"/>
+                        </graphic>
+                    </MFXButton>
+                </HBox>
+            </VBox>
+            <!-- OUTPUT LIST -->
+            <VBox spacing="16">
+                <MFXListView fx:id="outputFileList" prefWidth="240" prefHeight="490"/>
+                <HBox spacing="24">
+                    <MFXButton fx:id="exportOutputBtn" buttonType="RAISED" styleClass="primary, source-font"
+                               prefWidth="96" prefHeight="32" text="导出序列"
+                               onMouseClicked="#onExportOutputClicked"
+                    >
+                        <graphic>
+                            <FontIcon iconLiteral="mdi2f-file-export" iconColor="white"/>
+                        </graphic>
+                    </MFXButton>
+                    <HBox spacing="4">
+                        <MFXButton fx:id="outputMoveUpBtn" buttonType="RAISED"
+                                   prefWidth="32" prefHeight="32" text=""
+                                   onMouseClicked="#onMoveUpOutputClicked">
+                            <graphic>
+                                <FontIcon iconColor="#7a0ed9" iconSize="20"
+                                          iconLiteral="mdi2a-arrow-up-drop-circle-outline"/>
+                            </graphic>
+                        </MFXButton>
+                        <MFXButton fx:id="outputMoveDownBtn" buttonType="RAISED"
+                                   prefWidth="32" prefHeight="32" text=""
+                                   onMouseClicked="#onMoveDownOutputClicked">
+                            <graphic>
+                                <FontIcon iconColor="#7a0ed9" iconSize="20"
+                                          iconLiteral="mdi2a-arrow-down-drop-circle-outline"/>
+                            </graphic>
+                        </MFXButton>
+                        <MFXButton fx:id="outputDeleteBtn" buttonType="RAISED"
+                                   prefWidth="32" prefHeight="32" text=""
+                                   onMouseClicked="#onRemoveOutputClicked">
+                            <graphic>
+                                <FontIcon iconColor="#7a0ed9" iconSize="20"
+                                          iconLiteral="mdi2m-minus"/>
+                            </graphic>
+                        </MFXButton>
+                    </HBox>
+                </HBox>
+            </VBox>
+        </HBox>
+        <!-- STATUS BAR -->
+        <HBox spacing="32" minWidth="1200">
+            <FlowPane>
+                <Label styleClass="source-font" fx:id="statusLabel" text="就绪"/>
+                <MFXProgressBar fx:id="statusBar"/>
+            </FlowPane>
+            <HBox spacing="8" alignment="BASELINE_RIGHT">
+                <Label styleClass="source-font">缓存占用</Label>
+                <Label styleClass="code-font">5.8G/128G</Label>
+                <MFXButton fx:id="cleanBtn" styleClass="normal" onMouseClicked="#onClearClicked">清除缓存</MFXButton>
+                <MFXButton fx:id="aboutBtn" styleClass="normal" onMouseClicked="#onAboutClicked">关于</MFXButton>
             </HBox>
-        </VBox>
-    </HBox>
+        </HBox>
+    </VBox>
 </StackPane>
