@@ -240,7 +240,7 @@ public class MainController implements Initializable {
         var loader = new FXMLLoader(
                 MainApplication.class.getResource("fragment-view.fxml"));
         loader.setControllerFactory(c -> new FragmentController(editStage, fragmentInEdit));
-        var scene = new Scene(loader.load(), 600, 400);
+        var scene = new Scene(loader.load(), 480, 360);
         scene.getStylesheets().addAll(
                 Objects.requireNonNull(MainApplication.class.getResource("styles/Global.css")).toExternalForm(),
                 Objects.requireNonNull(MainApplication.class.getResource("styles/Button.css")).toExternalForm(),
@@ -355,6 +355,7 @@ public class MainController implements Initializable {
         Platform.runLater(() -> {
             viewModel.statusProperty().set("空闲");
             statusBar.progressProperty().unbind();
+            statusBar.progressProperty().set(0);
         });
     }
 
@@ -390,7 +391,7 @@ public class MainController implements Initializable {
 
                 var listener = new ExtFfmpegProgressListener(time);
 
-                setStatus("编码" + fragment.getDisplayName(), listener.workProgressProperty());
+                setStatus("编码", listener.workProgressProperty());
                 executor.createJob(fragment.getBuilder(), listener).run();
                 unsetStatus();
             }
@@ -420,8 +421,8 @@ public class MainController implements Initializable {
             }
 
             outputBuilder
-                    .setVideoBitRate(Long.parseLong(exportViewModel.getVideoRate()))
-                    .setAudioBitRate(Long.parseLong(exportViewModel.getAudioRate()))
+                    .setVideoBitRate(Long.parseLong(exportViewModel.getVideoRate()) * 1024)
+                    .setAudioBitRate(Long.parseLong(exportViewModel.getAudioRate()) * 1024)
                     .done();
 
             var listener = new ExtFfmpegProgressListener(totalTime);
@@ -446,6 +447,10 @@ public class MainController implements Initializable {
 
         for (var tempPathItem : pathList) {
             if (tempPathItem == null) {
+                continue;
+            }
+
+            if (tempPathItem.getName().equals(new File(viewModel.getTempPath()).getName())) {
                 continue;
             }
 
