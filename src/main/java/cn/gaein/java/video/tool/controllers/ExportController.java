@@ -54,7 +54,7 @@ public class ExportController implements Initializable {
         );
 
         audioCodecList.getItems().addAll(
-                "aac", "dts", "dvaudio", "flac", "mp3", "pcm_s16le", "sonic", "vorbis"
+                "aac", "dvaudio", "flac", "mp3", "pcm_s16le", "sonic", "vorbis"
         );
 
         videoCodecList.selectFirst();
