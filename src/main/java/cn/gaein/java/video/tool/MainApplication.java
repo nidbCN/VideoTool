@@ -25,7 +25,13 @@ public class MainApplication extends Application {
         var loader = new FXMLLoader(
                 MainApplication.class.getResource("main-view.fxml"));
 
-        loader.setControllerFactory(c -> new MainController(stage));
+        loader.setControllerFactory(c -> {
+            try {
+                return new MainController(stage);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
 
         var scene = new Scene(loader.load(), 1300, 600);
         scene.getStylesheets().addAll(

@@ -33,7 +33,6 @@ import net.bramp.ffmpeg.FFprobe;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
@@ -49,9 +48,11 @@ import java.util.concurrent.TimeUnit;
  */
 public class MainController implements Initializable {
     @FXML
+    private Label cacheSpaceLabel;
+    @FXML
     private MFXButton aboutBtn;
     @FXML
-    private MFXButton cleanBtn;
+    private MFXButton cleanCacheBtn;
     @FXML
     private MFXProgressBar statusBar;
     @FXML
@@ -88,7 +89,6 @@ public class MainController implements Initializable {
     private MFXButton outputMoveUpBtn;
     @FXML
     private MFXButton outputMoveDownBtn;
-    private Path tempDir;
     private final Stage stage;
     private DialogHelper dialogHelper;
     private FFmpegExecutor executor;
@@ -100,7 +100,7 @@ public class MainController implements Initializable {
     private final MainViewModel viewModel
             = new MainViewModel();
 
-    public MainController(Stage stage) {
+    public MainController(Stage stage) throws IOException {
         this.stage = stage;
     }
 
@@ -111,15 +111,10 @@ public class MainController implements Initializable {
         bindInit();
 
         try {
-            tempDir = Files.createTempDirectory("VideoToolsExport_");
             executor = new FFmpegExecutor(new FFmpeg("ffmpeg.exe"), new FFprobe("ffprobe.exe"));
         } catch (IOException e) {
-            if (tempDir == null) {
-                dialogHelper.getErrorDialog("无法创建临时目录，可能会影响序列导出正常使用。");
-            } else {
-                dialogHelper.getErrorDialog("未找到依赖程序：ffmpeg，请安装ffmpeg并添加环境变量\nhttps://ffmpeg.org/");
-                stage.close();
-            }
+            dialogHelper.getErrorDialog("未找到依赖程序：ffmpeg，请安装ffmpeg并添加环境变量\nhttps://ffmpeg.org/");
+            stage.close();
         }
     }
 
@@ -139,6 +134,7 @@ public class MainController implements Initializable {
 
     private void bindInit() {
         statusLabel.textProperty().bind(viewModel.statusProperty());
+        cacheSpaceLabel.textProperty().bind(viewModel.cacheSpaceProperty());
         statusBar.progressProperty().set(0);
     }
 
@@ -368,7 +364,7 @@ public class MainController implements Initializable {
                 fragment.edit(builder -> builder
                         .setStartTime(fragment.getStartTime().getTime(), TimeUnit.MILLISECONDS)
                         .setStopTime(fragment.getEndTime().getTime(), TimeUnit.MILLISECONDS)
-                        .addOutput(Paths.get(tempDir.toString(), fragment.getDisplayName() + ".ts").toString())
+                        .addOutput(Paths.get(viewModel.getTempPath(), fragment.getDisplayName() + ".ts").toString())
                         .done());
 
                 var time = fragment.getEndTime().getTime() - fragment.getStartTime().getTime();
@@ -385,7 +381,7 @@ public class MainController implements Initializable {
             // build concat input string
             builder.addInput("concat:\"" + String.join("|",
                     fragmentList.stream().map(f ->
-                            Paths.get(tempDir.toString(), f.getDisplayName() + ".ts").toString()
+                            Paths.get(viewModel.getTempPath(), f.getDisplayName() + ".ts").toString()
                     ).toList()) + "\""
             );
 
@@ -406,11 +402,11 @@ public class MainController implements Initializable {
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     @FXML
-    protected void onClearClicked() {
+    protected void onCleanCacheClicked() {
         var count = 0;
-        var pathList = new File(tempDir.getParent().toString()).listFiles(
-                (dir, name) -> (name.startsWith("VideoToolsExport")
-                ));
+        var pathList = new File(Path.of(viewModel.getTempPath()).getParent().toString()).listFiles(
+                (dir, name) -> (name.startsWith("VideoToolsExport_"))
+        );
 
         if (pathList == null) {
             return;

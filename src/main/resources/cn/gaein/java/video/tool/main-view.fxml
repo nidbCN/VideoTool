@@ -127,17 +127,29 @@
             </VBox>
         </HBox>
         <!-- STATUS BAR -->
-        <HBox spacing="32" minWidth="1200">
+        <HBox spacing="128">
             <FlowPane>
+                <Label styleClass="source-font" text="状态:"/>
                 <Label styleClass="source-font" fx:id="statusLabel"/>
-                <MFXProgressBar fx:id="statusBar"/>
+                <MFXProgressBar fx:id="statusBar">
+                <padding>
+                    <Insets left="8" />
+                </padding>
+                </MFXProgressBar>
             </FlowPane>
-            <HBox spacing="8" alignment="BASELINE_RIGHT">
-                <Label styleClass="source-font">缓存占用</Label>
-                <Label styleClass="code-font">5.8G/128G</Label>
-                <MFXButton fx:id="cleanBtn" styleClass="normal" onMouseClicked="#onClearClicked">清除缓存</MFXButton>
-                <MFXButton fx:id="aboutBtn" styleClass="normal" onMouseClicked="#onAboutClicked">关于</MFXButton>
-            </HBox>
+            <FlowPane alignment="BASELINE_RIGHT">
+                <Label styleClass="source-font" text="缓存盘空余:"/>
+                <Label fx:id="cacheSpaceLabel" styleClass="code-font"/>
+                <HBox spacing="8">
+                    <padding>
+                        <Insets left="8" />
+                    </padding>
+                    <MFXButton fx:id="cleanCacheBtn" styleClass="normal, source-font" text="清除缓存"
+                               onMouseClicked="#onCleanCacheClicked"/>
+                    <MFXButton fx:id="aboutBtn" styleClass="normal, source-font" text="关于"
+                               onMouseClicked="#onAboutClicked"/>
+                </HBox>
+            </FlowPane>
         </HBox>
     </VBox>
 </StackPane>
