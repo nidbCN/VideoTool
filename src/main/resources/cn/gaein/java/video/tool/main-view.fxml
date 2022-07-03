@@ -129,7 +129,7 @@
         <!-- STATUS BAR -->
         <HBox spacing="32" minWidth="1200">
             <FlowPane>
-                <Label styleClass="source-font" fx:id="statusLabel" text="就绪"/>
+                <Label styleClass="source-font" fx:id="statusLabel"/>
                 <MFXProgressBar fx:id="statusBar"/>
             </FlowPane>
             <HBox spacing="8" alignment="BASELINE_RIGHT">

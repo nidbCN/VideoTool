@@ -5,6 +5,7 @@ import cn.gaein.java.video.tool.compontents.PlayerView;
 import cn.gaein.java.video.tool.compontents.cell.FragmentCell;
 import cn.gaein.java.video.tool.compontents.cell.VideoCell;
 import cn.gaein.java.video.tool.ffmpeg.ExtFfmpegBuilder;
+import cn.gaein.java.video.tool.ffmpeg.listener.ExtFfmpegProgressListener;
 import cn.gaein.java.video.tool.helper.DialogHelper;
 import cn.gaein.java.video.tool.models.MainViewModel;
 import cn.gaein.java.video.tool.models.Video;
@@ -15,6 +16,8 @@ import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXListView;
 import io.github.palexdev.materialfx.controls.MFXProgressBar;
 import io.github.palexdev.materialfx.utils.others.FunctionalStringConverter;
+import javafx.application.Platform;
+import javafx.beans.property.DoubleProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -36,7 +39,10 @@ import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.ResourceBundle;
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Gaein
@@ -102,6 +108,7 @@ public class MainController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         listInit();
         dialogInit();
+        bindInit();
 
         try {
             tempDir = Files.createTempDirectory("VideoToolsExport_");
@@ -130,8 +137,9 @@ public class MainController implements Initializable {
         dialogHelper = new DialogHelper(stage);
     }
 
-    private void BindInit() {
+    private void bindInit() {
         statusLabel.textProperty().bind(viewModel.statusProperty());
+        statusBar.progressProperty().set(0);
     }
 
     @FXML
@@ -262,7 +270,6 @@ public class MainController implements Initializable {
 
     @FXML
     protected void onExportSettingClicked() {
-
     }
 
     @FXML
@@ -323,6 +330,20 @@ public class MainController implements Initializable {
         selection.selectIndex(index + 1);
     }
 
+    private void setStatus(String text, DoubleProperty property) {
+        Platform.runLater(() -> {
+            viewModel.statusProperty().set(text);
+            statusBar.progressProperty().bind(property);
+        });
+    }
+
+    private void unsetStatus() {
+        Platform.runLater(() -> {
+            viewModel.statusProperty().set("空闲");
+            statusBar.progressProperty().unbind();
+        });
+    }
+
     @FXML
     protected void onExportOutputClicked() {
         var fragmentList = outputFileList.getItems();
@@ -339,59 +360,56 @@ public class MainController implements Initializable {
 
         playerView.pause();
 
-        // export
-        var taskList = fragmentList.stream().map(f ->
-                (Callable<Void>) () -> {
-                    f.edit(builder -> builder
-                            .setStartTime(f.getStartTime().getTime(), TimeUnit.MILLISECONDS)
-                            .setStopTime(f.getEndTime().getTime(), TimeUnit.MILLISECONDS)
-                            .addOutput(Paths.get(tempDir.toString(), f.getDisplayName() + ".ts").toString())
-                            .done());
-                    executor.createJob(f.getBuilder()).run();
-                    return null;
-                }).toList();
-
         executorService.submit(() -> {
-                    viewModel.statusProperty().set("处理");
+            long totalTime = 0L;
 
-                    try {
-                        executorService.invokeAll(taskList);
-                        statusBar.progressProperty().set(50);
-                    } catch (InterruptedException e) {
-                        dialogHelper.getErrorDialog("处理导出队列时发生错误:\n" + e.getMessage()).show();
-                        viewModel.statusProperty().set("空闲");
-                        e.printStackTrace();
-                        return;
-                    } finally {
-                        statusBar.progressProperty().set(0);
-                    }
+            // export fragments
+            for (var fragment : fragmentList) {
+                fragment.edit(builder -> builder
+                        .setStartTime(fragment.getStartTime().getTime(), TimeUnit.MILLISECONDS)
+                        .setStopTime(fragment.getEndTime().getTime(), TimeUnit.MILLISECONDS)
+                        .addOutput(Paths.get(tempDir.toString(), fragment.getDisplayName() + ".ts").toString())
+                        .done());
 
-                    var builder = new ExtFfmpegBuilder();
+                var time = fragment.getEndTime().getTime() - fragment.getStartTime().getTime();
+                totalTime += time;
 
-                    // build concat input string
-                    builder.addInput("concat:\"" + String.join("|",
-                            fragmentList.stream().map(f ->
-                                    Paths.get(tempDir.toString(), f.getDisplayName() + ".ts").toString()
-                            ).toList()) + "\""
-                    );
+                var listener = new ExtFfmpegProgressListener(time);
 
-                    // TODO: apply export setting
+                setStatus("编码" + fragment.getDisplayName(), listener.workProgressProperty());
+                executor.createJob(fragment.getBuilder(), listener).run();
+                unsetStatus();
+            }
 
-                    builder.addOutput(file.getPath())
-                            .setVideoCodec("h264")
-                            .setAudioCodec("aac")
-                            .done();
+            var builder = new ExtFfmpegBuilder();
+            // build concat input string
+            builder.addInput("concat:\"" + String.join("|",
+                    fragmentList.stream().map(f ->
+                            Paths.get(tempDir.toString(), f.getDisplayName() + ".ts").toString()
+                    ).toList()) + "\""
+            );
 
-                    executor.createJob(builder).run();
-                }
-        );
+            // TODO: apply export setting
+
+            builder.addOutput(file.getPath())
+                    .setVideoCodec("h264")
+                    .setAudioCodec("aac")
+                    .done();
+
+            var listener = new ExtFfmpegProgressListener(totalTime);
+
+            setStatus("导出序列", listener.workProgressProperty());
+            executor.createJob(builder, listener).run();
+            unsetStatus();
+        });
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @FXML
     protected void onClearClicked() {
         var count = 0;
         var pathList = new File(tempDir.getParent().toString()).listFiles(
-                (dir, name) -> (name.startsWith("VideoToolExport")
+                (dir, name) -> (name.startsWith("VideoToolsExport")
                 ));
 
         if (pathList == null) {
@@ -409,9 +427,11 @@ public class MainController implements Initializable {
                     continue;
                 }
 
-                tempFile.delete();
                 count += tempFile.length();
+                tempFile.delete();
             }
+
+            tempPathItem.delete();
         }
 
         // Unit to MB
@@ -431,7 +451,7 @@ public class MainController implements Initializable {
                         Github: https://github.com/nidbCN/VideoTool\s
                         开源协议: The GNU General Public License v3.0\s
                         引用项目: JavaFX, MaterialFX, ffmpeg, ffmpeg-cli-wrapper, vlc, vlcj...\s
-                        
+                                                
                         VideoTool 是自由软件，“‘自由软件’尊重用户的自由，并且尊重整个社区。粗略来讲，一个软件如果是自由软件，这意味着用户可以自由地运行，拷贝，分发，学习，修改并改进该软件。”
                             关于自由软件的哲学与自由软件运动详见：https://www.gnu.org/philosophy/free-sw.html"""
         );
