@@ -288,7 +288,7 @@ public class MainController implements Initializable {
             var outputBuilder = builder
                     .setStartTime(fragmentInEdit.getStartTime().getTime(), TimeUnit.MILLISECONDS)
                     .setStopTime(fragmentInEdit.getEndTime().getTime(), TimeUnit.MILLISECONDS)
-                    .addOutput(Paths.get(viewModel.getTempPath(), fragmentInEdit.getDisplayName() + ".mkv").toString());
+                    .addOutput(Paths.get(viewModel.getTempPath(), fragmentInEdit.getFullDisplayName() + ".mkv").toString());
             if (fragmentModel.isEnableEncode()) {
                 outputBuilder
                         .setVideoCodec("rawvideo")
@@ -418,6 +418,9 @@ public class MainController implements Initializable {
         chooser.setTitle("导出序列为");
         chooser.getExtensionFilters().addAll(FileExtensions.getVideoExtensions());
         var file = chooser.showSaveDialog(stage);
+        if (file == null) {
+            return;
+        }
 
         playerView.pause();
 
@@ -443,7 +446,7 @@ public class MainController implements Initializable {
             // build concat input string
             builder.addInput("concat:\"" + String.join("|",
                     fragmentList.stream().map(f ->
-                            Paths.get(viewModel.getTempPath(), f.getDisplayName() + ".mkv").toString()
+                            Paths.get(viewModel.getTempPath(), f.getFullDisplayName() + ".mkv").toString()
                     ).toList()) + "\""
             );
 
