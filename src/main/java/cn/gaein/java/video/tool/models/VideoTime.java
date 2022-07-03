@@ -48,7 +48,7 @@ public class VideoTime {
 
     public void setTime(long time) {
         if (time < 0) {
-            throw new IllegalArgumentException("time cannot be less than zero");
+            time = 0;
         }
         this.time = time;
 
