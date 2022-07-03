@@ -7,6 +7,7 @@ import cn.gaein.java.video.tool.compontents.cell.VideoCell;
 import cn.gaein.java.video.tool.ffmpeg.ExtFfmpegBuilder;
 import cn.gaein.java.video.tool.ffmpeg.listener.ExtFfmpegProgressListener;
 import cn.gaein.java.video.tool.helper.DialogHelper;
+import cn.gaein.java.video.tool.models.ExportViewModel;
 import cn.gaein.java.video.tool.models.MainViewModel;
 import cn.gaein.java.video.tool.models.Video;
 import cn.gaein.java.video.tool.models.VideoFragment;
@@ -92,6 +93,9 @@ public class MainController implements Initializable {
     private final Stage stage;
     private DialogHelper dialogHelper;
     private FFmpegExecutor executor;
+    private final ExportViewModel exportViewModel
+            = new ExportViewModel();
+
     private final ExecutorService executorService
             = new ThreadPoolExecutor(
             4, 8, 0L, TimeUnit.MILLISECONDS,
@@ -155,13 +159,13 @@ public class MainController implements Initializable {
             var video = new Video(f);
             var index = videoList.size();
 
-            videoList.add(index, video);
+            videoList.add(video);
 
             var item = inputFileList.getCell(index);
             item.setOnMouseClicked(e -> {
                 // video item clicked
-                playerView.setVideo(video);
-                playerView.open();
+                playerView.stop();
+                playerView.open(video);
             });
         });
     }
@@ -248,7 +252,6 @@ public class MainController implements Initializable {
         editStage.setResizable(false);
         editStage.showAndWait();
 
-        // just for test
         var outputFileListArr = outputFileList.getItems();
         outputFileListArr.add(fragmentInEdit);
         fragmentInEdit = null;
@@ -265,7 +268,22 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    protected void onExportSettingClicked() {
+    protected void onExportSettingClicked() throws IOException {
+        var settingStage = new Stage();
+        var loader = new FXMLLoader(
+                MainApplication.class.getResource("export-view.fxml"));
+        loader.setControllerFactory(c -> new ExportController(settingStage, exportViewModel));
+        var scene = new Scene(loader.load(), 480, 360);
+        scene.getStylesheets().addAll(
+                Objects.requireNonNull(MainApplication.class.getResource("styles/Global.css")).toExternalForm(),
+                Objects.requireNonNull(MainApplication.class.getResource("styles/Button.css")).toExternalForm(),
+                Objects.requireNonNull(MainApplication.class.getResource("styles/Fonts.css")).toExternalForm()
+        );
+
+        settingStage.setScene(scene);
+        settingStage.setTitle("导出设置");
+        settingStage.setResizable(false);
+        settingStage.showAndWait();
     }
 
     @FXML
@@ -386,10 +404,24 @@ public class MainController implements Initializable {
             );
 
             // TODO: apply export setting
+            if (exportViewModel.isDisableAudio()) {
+                builder.addOption("-an");
+            }
 
-            builder.addOutput(file.getPath())
-                    .setVideoCodec("h264")
-                    .setAudioCodec("aac")
+            var outputBuilder = builder.addOutput(file.getPath());
+            if (exportViewModel.isEnableEncode()) {
+                outputBuilder
+                        .setVideoCodec(exportViewModel.getVideoCodec())
+                        .setAudioCodec(exportViewModel.getAudioCodec());
+            } else {
+                outputBuilder
+                        .setVideoCodec("h264")
+                        .setAudioCodec("aac");
+            }
+
+            outputBuilder
+                    .setVideoBitRate(Long.parseLong(exportViewModel.getVideoRate()))
+                    .setAudioBitRate(Long.parseLong(exportViewModel.getAudioRate()))
                     .done();
 
             var listener = new ExtFfmpegProgressListener(totalTime);
