@@ -14,10 +14,10 @@ public class ExportViewModel {
             = new SimpleStringProperty();
     private final StringProperty audioCodec
             = new SimpleStringProperty();
-    private final DoubleProperty videoRate
-            = new SimpleDoubleProperty(2048);
-    private final DoubleProperty audioRate
-            = new SimpleDoubleProperty(512);
+    private final StringProperty videoRate
+            = new SimpleStringProperty("2048");
+    private final StringProperty audioRate
+            = new SimpleStringProperty("512");
 
     public BooleanProperty disableAudioProperty() {
         return disableAudio;
@@ -35,11 +35,11 @@ public class ExportViewModel {
         return audioCodec;
     }
 
-    public DoubleProperty videoRateProperty() {
+    public StringProperty videoRateProperty() {
         return videoRate;
     }
 
-    public DoubleProperty audioRateProperty() {
+    public StringProperty audioRateProperty() {
         return audioRate;
     }
 }
