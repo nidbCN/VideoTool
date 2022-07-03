@@ -14,7 +14,7 @@ public class MainViewModel {
     private final StringProperty status
             = new SimpleStringProperty("空闲");
     private final String tempPath
-            = Files.createTempDirectory("VideoToolsExport_").toString();
+            = Files.createTempDirectory(Path.of("D:\\Temp"), "VideoToolsExport_").toString();
     private final StringProperty cacheSpace
             = new SimpleStringProperty("0GB");
 

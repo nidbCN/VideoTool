@@ -1,8 +1,6 @@
 package cn.gaein.java.video.tool.controllers;
 
-import cn.gaein.java.video.tool.helper.DialogHelper;
 import cn.gaein.java.video.tool.models.FragmentViewModel;
-import cn.gaein.java.video.tool.models.VideoFragment;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.controls.MFXToggleButton;
@@ -35,30 +33,25 @@ public class FragmentController implements Initializable {
     private MFXTextField cropHeightText;
     @FXML
     private MFXToggleButton disableAudioBtn;
-
     private final Stage stage;
-    private final VideoFragment fragment;
-    private final DialogHelper dialogHelper;
-    private final FragmentViewModel fragmentModel
-            = new FragmentViewModel();
 
-    public FragmentController(Stage stage, VideoFragment fragment) {
+    private final FragmentViewModel viewModel;
+
+    public FragmentController(Stage stage, FragmentViewModel viewModel) {
         this.stage = stage;
-        this.fragment = fragment;
-
-        dialogHelper = new DialogHelper(stage);
+        this.viewModel = viewModel;
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // init bind property
-        fragmentModel.disableAudioProperty().bind(disableAudioBtn.selectedProperty());
-        fragmentModel.enableCropProperty().bind(enableCropBtn.selectedProperty());
-        fragmentModel.cropFromProperty().bind(cropFromText.textProperty());
-        fragmentModel.cropToProperty().bind(cropToText.textProperty());
-        fragmentModel.cropWidthProperty().bind(cropWidthText.textProperty());
-        fragmentModel.cropHeightProperty().bind(cropHeightText.textProperty());
-        fragmentModel.enableEncodeProperty().bind(enableEncodeBtn.selectedProperty());
+        viewModel.disableAudioProperty().bind(disableAudioBtn.selectedProperty());
+        viewModel.enableCropProperty().bind(enableCropBtn.selectedProperty());
+        viewModel.cropFromProperty().bind(cropFromText.textProperty());
+        viewModel.cropToProperty().bind(cropToText.textProperty());
+        viewModel.cropWidthProperty().bind(cropWidthText.textProperty());
+        viewModel.cropHeightProperty().bind(cropHeightText.textProperty());
+        viewModel.enableEncodeProperty().bind(enableEncodeBtn.selectedProperty());
 
         cropFromText.disableProperty().bind(enableCropBtn.selectedProperty().not());
         cropToText.disableProperty().bind(enableCropBtn.selectedProperty().not());
@@ -73,41 +66,7 @@ public class FragmentController implements Initializable {
 
     @FXML
     protected void onSaveBtnClicked() {
-        if (fragmentModel.disableAudioProperty().get()) {
-            fragment.edit(builder ->
-                    builder.addOption("-an"));
-        }
 
-        if (fragmentModel.enableCropProperty().get()) {
-            var cropFrom = fragmentModel.cropFromProperty().get();
-            var cropTo = fragmentModel.cropToProperty().get();
-            var cropWidth = fragmentModel.cropWidthProperty().get();
-            var cropHeight = fragmentModel.cropHeightProperty().get();
-
-            try {
-                Integer.parseInt(cropFrom);
-                Integer.parseInt(cropTo);
-                Integer.parseInt(cropWidth);
-                Integer.parseInt(cropHeight);
-            } catch (NumberFormatException e) {
-                dialogHelper.getErrorDialog("格式错误，请输入数字").show();
-                return;
-            }
-
-            fragment.edit(builder ->
-                    builder.setVideoFilter("crop=" + cropWidth
-                            + ":" + cropHeight
-                            + ":" + cropFrom
-                            + ":" + cropTo)
-            );
-        }
-
-        if (fragmentModel.enableEncodeProperty().get()) {
-            fragment.edit(builder -> builder
-                    .addOption("-vcodec", "h264")
-                    .addOption("-acodec", "aac")
-            );
-        }
 
         stage.close();
     }

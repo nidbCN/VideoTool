@@ -1,6 +1,6 @@
 package cn.gaein.java.video.tool.compontents.cell;
 
-import cn.gaein.java.video.tool.models.VideoFragment;
+import cn.gaein.java.video.tool.videos.VideoFragment;
 import io.github.palexdev.materialfx.controls.MFXListView;
 import io.github.palexdev.materialfx.controls.MFXTooltip;
 import io.github.palexdev.materialfx.controls.cell.MFXListCell;

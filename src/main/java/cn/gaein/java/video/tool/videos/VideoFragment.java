@@ -1,4 +1,4 @@
-package cn.gaein.java.video.tool.models;
+package cn.gaein.java.video.tool.videos;
 
 import cn.gaein.java.video.tool.ffmpeg.ExtFfmpegBuilder;
 

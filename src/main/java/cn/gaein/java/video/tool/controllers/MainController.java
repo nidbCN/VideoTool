@@ -8,10 +8,11 @@ import cn.gaein.java.video.tool.ffmpeg.ExtFfmpegBuilder;
 import cn.gaein.java.video.tool.ffmpeg.listener.ExtFfmpegProgressListener;
 import cn.gaein.java.video.tool.helper.DialogHelper;
 import cn.gaein.java.video.tool.models.ExportViewModel;
+import cn.gaein.java.video.tool.models.FragmentViewModel;
 import cn.gaein.java.video.tool.models.MainViewModel;
-import cn.gaein.java.video.tool.models.Video;
-import cn.gaein.java.video.tool.models.VideoFragment;
 import cn.gaein.java.video.tool.utils.FileExtensions;
+import cn.gaein.java.video.tool.videos.Video;
+import cn.gaein.java.video.tool.videos.VideoFragment;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXListView;
@@ -237,9 +238,10 @@ public class MainController implements Initializable {
         playerView.pause();
 
         var editStage = new Stage();
+        var fragmentModel = new FragmentViewModel();
         var loader = new FXMLLoader(
                 MainApplication.class.getResource("fragment-view.fxml"));
-        loader.setControllerFactory(c -> new FragmentController(editStage, fragmentInEdit));
+        loader.setControllerFactory(c -> new FragmentController(editStage, fragmentModel));
         var scene = new Scene(loader.load(), 480, 360);
         scene.getStylesheets().addAll(
                 Objects.requireNonNull(MainApplication.class.getResource("styles/Global.css")).toExternalForm(),
@@ -251,6 +253,49 @@ public class MainController implements Initializable {
         editStage.setTitle("编辑片段: " + fragmentInEdit.getDisplayName());
         editStage.setResizable(false);
         editStage.showAndWait();
+
+        if (fragmentModel.disableAudioProperty().get()) {
+            fragmentInEdit.edit(builder ->
+                    builder.addOption("-an"));
+        }
+
+        if (fragmentModel.enableCropProperty().get()) {
+            var cropFrom = fragmentModel.cropFromProperty().get();
+            var cropTo = fragmentModel.cropToProperty().get();
+            var cropWidth = fragmentModel.cropWidthProperty().get();
+            var cropHeight = fragmentModel.cropHeightProperty().get();
+
+            try {
+                Integer.parseInt(cropFrom);
+                Integer.parseInt(cropTo);
+                Integer.parseInt(cropWidth);
+                Integer.parseInt(cropHeight);
+            } catch (NumberFormatException e) {
+                dialogHelper.getErrorDialog("格式错误，请输入数字").show();
+                return;
+            }
+
+            fragmentInEdit.edit(builder ->
+                    builder.setVideoFilter("crop=" + cropWidth
+                            + ":" + cropHeight
+                            + ":" + cropFrom
+                            + ":" + cropTo)
+            );
+        }
+
+
+        fragmentInEdit.edit(builder -> {
+            var outputBuilder = builder
+                    .addOutput(Paths.get(viewModel.getTempPath(), fragmentInEdit.getDisplayName() + ".ts").toString());
+            if
+        });
+
+        if (fragmentModel.enableEncodeProperty().get()) {
+            fragmentInEdit.edit(builder -> builder
+                    .addOption("-vcodec", "h264")
+                    .addOption("-acodec", "aac")
+            );
+        }
 
         var outputFileListArr = outputFileList.getItems();
         outputFileListArr.add(fragmentInEdit);
@@ -379,21 +424,23 @@ public class MainController implements Initializable {
             long totalTime = 0L;
 
             // export fragments
+            var processOrder = 0;
             for (var fragment : fragmentList) {
                 fragment.edit(builder -> builder
                         .setStartTime(fragment.getStartTime().getTime(), TimeUnit.MILLISECONDS)
                         .setStopTime(fragment.getEndTime().getTime(), TimeUnit.MILLISECONDS)
-                        .addOutput(Paths.get(viewModel.getTempPath(), fragment.getDisplayName() + ".ts").toString())
-                        .done());
+                );
 
                 var time = fragment.getEndTime().getTime() - fragment.getStartTime().getTime();
                 totalTime += time;
 
                 var listener = new ExtFfmpegProgressListener(time);
 
-                setStatus("编码", listener.workProgressProperty());
+                setStatus("编码 " + processOrder + "/" + fragmentList.size(), listener.workProgressProperty());
                 executor.createJob(fragment.getBuilder(), listener).run();
                 unsetStatus();
+
+                processOrder++;
             }
 
             var builder = new ExtFfmpegBuilder();

@@ -11,6 +11,35 @@ import javafx.beans.property.StringProperty;
 public class FragmentViewModel {
     private final BooleanProperty disableAudio
             = new SimpleBooleanProperty();
+
+    public boolean isDisableAudio() {
+        return disableAudio.get();
+    }
+
+    public boolean isEnableCrop() {
+        return enableCrop.get();
+    }
+
+    public String getCropFrom() {
+        return cropFrom.get();
+    }
+
+    public String getCropTo() {
+        return cropTo.get();
+    }
+
+    public String getCropWidth() {
+        return cropWidth.get();
+    }
+
+    public String getCropHeight() {
+        return cropHeight.get();
+    }
+
+    public boolean isEnableEncode() {
+        return enableEncode.get();
+    }
+
     private final BooleanProperty enableCrop
             = new SimpleBooleanProperty();
     private final StringProperty cropFrom

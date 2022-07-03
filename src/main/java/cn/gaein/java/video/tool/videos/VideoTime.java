@@ -1,4 +1,4 @@
-package cn.gaein.java.video.tool.models;
+package cn.gaein.java.video.tool.videos;
 
 import java.util.Calendar;
 import java.util.Date;

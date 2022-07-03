@@ -1,8 +1,8 @@
 package cn.gaein.java.video.tool.compontents;
 
 import cn.gaein.java.video.tool.compontents.beans.PositionProperty;
-import cn.gaein.java.video.tool.models.Video;
-import cn.gaein.java.video.tool.models.VideoTime;
+import cn.gaein.java.video.tool.videos.Video;
+import cn.gaein.java.video.tool.videos.VideoTime;
 import cn.gaein.java.video.tool.videosurface.PixelBufferVideoSurface;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXSlider;
