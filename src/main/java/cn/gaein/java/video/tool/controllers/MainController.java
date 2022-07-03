@@ -404,7 +404,6 @@ public class MainController implements Initializable {
                     ).toList()) + "\""
             );
 
-            // TODO: apply export setting
             if (exportViewModel.isDisableAudio()) {
                 builder.addOption("-an");
             }
